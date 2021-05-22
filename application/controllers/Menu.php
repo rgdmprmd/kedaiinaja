@@ -42,7 +42,7 @@ class Menu extends CI_Controller
                 $tr .= '<h3>'.$m['makanan_nama'].'</h3>';
                 $tr .= '<small>'.$m['makananjenis_nama'].'</small>';
                 $tr .= '<p>Rp. '.number_format($m['makanan_harga']).'</p>';
-                $tr .= '<button type="button">Add</button>';
+                $tr .= '<button type="button" id="add-to-cart" data-id="'.$m['makanan_id'].'" data-user="'.$this->session->userdata('client_email').'">Add</button>';
                 $tr .= '</div>';
             }
 

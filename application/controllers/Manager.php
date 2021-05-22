@@ -67,7 +67,7 @@ class Manager extends CI_Controller
     
             $image_name=$nomerMeja.'.png'; //buat name dari qr code sesuai dengan nim
     
-            $params['data'] = base_url()."customers/start_orders?type=dinein&meja=".$nomerMeja; //data yang akan di jadikan QR CODE
+            $params['data'] = base_url()."menu?type=dinein&meja=".$nomerMeja; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=
             $params['size'] = 10;
             $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/

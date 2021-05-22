@@ -56,5 +56,16 @@
         $(document).on('change keyup', '#keyword_search', function(e) {
             get_data('');
         });
+
+        $(document).on('click', '#add-to-cart', function(e) {
+            let id = $(this).data('id');
+            let user = $(this).data('user');
+
+            if (!user) {
+                document.location.href = base_url + 'client_auth';
+                return false;
+            }
+            console.log(id, user);
+        })
     });
 </script>
