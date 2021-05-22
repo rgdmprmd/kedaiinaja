@@ -13,6 +13,7 @@ class Menu extends CI_Controller
     {
         $data['title'] = 'Menu';
         $data['category'] = $this->model->getCategory();
+        $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 
         $this->load->view('templates/client_header', $data);
         $this->load->view('menu/index', $data);

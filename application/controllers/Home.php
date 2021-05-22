@@ -1,6 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-// Controller auth, mengelola authentikasi user (registrasi, login, etc)
 class Home extends CI_Controller
 {
     public function __construct()
@@ -13,6 +12,7 @@ class Home extends CI_Controller
     {
         $data['title'] = "Login";
         $data['category'] = $this->model->getCategory();
+        $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 
         $this->load->view('templates/client_header', $data);
         $this->load->view('home/index', $data);

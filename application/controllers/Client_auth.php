@@ -93,6 +93,79 @@ class Client_auth extends CI_Controller
         }
     }
 
+    public function login_user()
+    {
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $formEror = [
+                'email' => form_error('email', '<small class="text-danger">', '</small>'),
+                'password' => form_error('password', '<small class="text-danger">', '</small>')
+            ];
+
+            $result = [
+                'result' => 400,
+                'message' => $formEror
+            ];
+
+            echo json_encode($result);
+        } else {
+            $this->_login();
+        }
+    }
+
+    private function _login()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        $user = $this->model->getUserByEmail($email);
+
+        if ($user) {
+            if ($user['user_status'] == 1) {
+                if (password_verify($password, $user['user_password'])) {
+                    $data = [
+                        'client_email' => $user['user_email'],
+                    ];
+
+                    $this->session->set_userdata($data);
+
+                    $result = [
+                        'result' => 200,
+                        'message' => $user['user_email']
+                    ];
+        
+                    echo json_encode($result);
+                } else {
+                    // Salah password
+                    $result = [
+                        'result' => 403,
+                        'message' => $email
+                    ];
+        
+                    echo json_encode($result);
+                }
+            } else {
+                // Email tidak aktif
+                $result = [
+                    'result' => 402,
+                    'message' => $email
+                ];
+    
+                echo json_encode($result);
+            }
+        } else {
+            // Salah email
+            $result = [
+                'result' => 401,
+                'message' => $email
+            ];
+
+            echo json_encode($result);
+        }
+    }
+
     private function _sendEmail($token, $type, $email)
     {
         // Config standar untuk sendEmail menggunakan GMAIL
@@ -137,7 +210,6 @@ class Client_auth extends CI_Controller
             // Jika berhasil return true
             return true;
         } else {
-            // Jika gagal tampilkan errornya
             echo $this->email->print_debugger();
             die;
         }
@@ -170,14 +242,20 @@ class Client_auth extends CI_Controller
                     redirect('client_auth');
                 }
             } else {
-                // Jika tokennya ga ketemu, tampilkan pesan error dan redirect ke halaman login
                 $this->session->set_flashdata('wtoken', 'Activation');
                 redirect('client_auth');
             }
         } else {
-            // Jika usernya ga ada, tampilkan pesan email salah
             $this->session->set_flashdata('wemail', $email);
             redirect('client_auth');
         }
+    }
+
+    public function logout()
+    {
+        $this->session->unset_userdata('client_email');
+        
+        $this->session->set_flashdata('logout', 'Logout');
+        redirect('home');
     }
 }

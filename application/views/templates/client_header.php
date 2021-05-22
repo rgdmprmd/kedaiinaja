@@ -22,11 +22,18 @@
             <ul>
                 <li><a href="<?= base_url("home"); ?>">Home</a></li>
                 <li><a href="<?= base_url("menu"); ?>">Menu</a></li>
+                <?php if($user): ?>
+                <li><a href="<?= base_url("client_auth/logout"); ?>">Logout</a></li>
+                <li class="mode_icon">
+                    <i class="dark_mode fas fa-moon"></i>
+                </li>
+                <li><img src="<?= base_url(); ?>assets/img/profile/<?= $user['user_image']; ?>" alt="<?= $user['user_nama']; ?>" title="<?= $user['user_nama']; ?>" width="40" /></li>
+                <?php else: ?>
                 <li><a href="<?= base_url("client_auth"); ?>">Login</a></li>
                 <li class="mode_icon">
                     <i class="dark_mode fas fa-moon"></i>
                 </li>
-                <li><img src="https://avatars.dicebear.com/api/human/kedai.svg" alt="" width="40" /></li>
+                <?php endif; ?>
             </ul>
 
             <!-- burger -->

@@ -22,7 +22,7 @@
                                 <div class="ex-token" data-extoken="<?= $this->session->flashdata('extoken'); ?>"></div>
                                 <div class="success-reset" data-sreset="<?= $this->session->flashdata('sreset'); ?>"></div>
 
-                                <form class="user mt-5" method="POST" action="<?= base_url(); ?>auth/ajaxLogin" id="form-login">
+                                <form class="user mt-5" method="POST" action="<?= base_url(); ?>client_auth/login_user" id="form-login">
                                     <div class="form-group">
                                         <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Email address" autocomplete="off" value="<?= set_value('email'); ?>">
                                         <span class="email-error"></span>
@@ -34,9 +34,7 @@
                                     <div class="form-group">
                                         <a class="small" href="<?= base_url(); ?>client_auth/forgotpassword">Forgot your password?</a>
                                     </div>
-                                    <button type="submit" name="submit" class="btn btn-primary btn-user btn-block">
-                                        Login
-                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block" id="btn-login">Login</button>
                                 </form>
                                 <div class="text-left mt-1">
                                     <span class=" small text-muted">Need an account? </span><a class="small" href="<?= base_url(); ?>client_auth/registration">Register!</a>
@@ -50,3 +48,75 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+        const base_url = '<?= base_url(); ?>';
+
+        $(document).on("submit", "#form-login", function(e) {
+            e.preventDefault();
+
+            $('.email-error').html('');
+            $('.password-error').html('');
+
+            let url = $(this).attr("action");
+            let formData = new FormData(this);
+
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                dataType: 'JSON',
+                processData: false,
+                contentType: false,
+                data: formData,
+                beforeSend: function(response) {
+                    $("#btn-login").attr("disabled", true);
+                },
+                success: function(response) {
+                    $("#btn-login").attr("disabled", false);
+
+                    if (response.result == 400) {
+
+                        $('.email-error').html(response.message.email);
+                        $('.password-error').html(response.message.password);
+
+                        $('#password').val('');
+                    } else if (response.result == 401) {
+                        Swal.fire({
+                            icon: 'warning',
+                            width: 800,
+                            padding: '2em',
+                            title: 'Oops, email salah!',
+                            html: "<span class='text-primary'>" + response.message + "</span> tidak terdaftar. Kamu harus registrasi dulu."
+                        }).then((result) => {
+                            location.reload();
+                        });
+                    } else if (response.result == 402) {
+                        Swal.fire({
+                            icon: 'warning',
+                            width: 800,
+                            padding: '2em',
+                            title: 'Oops, email kamu belum aktif!',
+                            html: "<span class='text-primary'>" + response.message + "</span> belum diaktivasi. Silahkan cek email kamu untuk melakukan aktivasi."
+                        }).then((result) => {
+                            location.reload();
+                        });
+                    } else if (response.result == 403) {
+                        Swal.fire({
+                            icon: 'warning',
+                            width: 800,
+                            padding: '2em',
+                            title: 'Oops, password salah!',
+                            html: "Kamu lupa password? sebaiknya kamu coba fitur lupa password."
+                        }).then((result) => {
+                            $("#password").val('');
+                        });
+                    } else if (response.result == 200) {
+                        document.location.href = base_url + 'home';
+                    }
+                }
+            });
+        });
+    });
+</script>
