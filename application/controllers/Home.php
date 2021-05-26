@@ -10,7 +10,7 @@ class Home extends CI_Controller
 
     public function index()
     {
-        $data['title'] = "Login";
+        $data['title'] = "Home";
         $data['category'] = $this->model->getCategory();
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 

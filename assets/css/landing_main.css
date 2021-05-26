@@ -267,7 +267,8 @@ section .menu_category .swiper_nav h3::after {
 }
 
 #keyword_search,
-#category {
+#category,
+.btn-cart {
 	background: transparent;
 	border: 1px solid #6c63ff;
 	border-radius: 10px;
@@ -275,6 +276,10 @@ section .menu_category .swiper_nav h3::after {
 	outline: none;
 	color: inherit;
 	margin-top: 10px;
+}
+
+.btn-cart {
+	text-decoration: none;
 }
 
 .menus-container {

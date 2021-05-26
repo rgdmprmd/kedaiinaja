@@ -3,6 +3,7 @@
         <div class="swiper_nav">
             <h3>Menu Kami</h3>
             <div class="filter">
+                <a href="#" class="btn-cart"><i class="fas fa-shopping-cart"></i> <span class="text number">0</span></a>
                 <select name="category" id="category">
                     <option value="all">All Category</option>
                     <?php foreach($category as $c): ?>
