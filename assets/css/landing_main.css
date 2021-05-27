@@ -273,6 +273,7 @@ section .menu_category .swiper_nav h3::after {
 	background: transparent;
 	border: 1px solid #6c63ff;
 	border-radius: 10px;
+	font-size: inherit;
 	padding: 10px;
 	outline: none;
 	color: inherit;
@@ -356,6 +357,102 @@ section .menu_category .swiper_nav h3::after {
 .card button:hover {
 	background: #3c33f5;
 	cursor: pointer;
+}
+
+.checkout_item {
+	margin-top: 20px;
+}
+
+.checkout_card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 10px;
+	border-radius: 10px;
+	margin-top: 20px;
+	transition: 0.3s all ease-in-out;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.checkout_card:hover {
+	transform: translateY(-3px);
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 20px 30px -7px;
+}
+
+.checkout_card img {
+	border-radius: 5px;
+	object-fit: contain;
+	width: 80px;
+	height: 80px;
+	background: black;
+}
+
+.checkout_card .checkout_title {
+	margin-left: 10px;
+	flex: 4;
+}
+
+.checkout_card .total_harga {
+	flex: 1;
+	text-align: right;
+	margin-right: 10px;
+}
+
+.checkout_card .qty {
+	padding: 10px;
+	border-radius: 10px;
+	text-align: center;
+	background-color: transparent;
+	color: inherit;
+	outline: none;
+}
+
+.btn-minus,
+.btn-plus {
+	color: #6c63ff;
+	font-size: 12px;
+	width: 20px;
+	height: 20px;
+	margin: 0px 10px;
+	border: 1px solid #6c63ff;
+	border-radius: 50%;
+	background-color: transparent;
+}
+
+.btn-minus:hover,
+.btn-plus:hover {
+	color: whitesmoke;
+	background-color: #6c63ff;
+}
+
+.checkout_card .checkout_delete {
+	margin-right: 10px;
+}
+
+.checkout_total {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 30px;
+}
+
+.checkout_total .tambah_item {
+	flex: 5;
+}
+
+.checkout_total .tambah_item a {
+	text-decoration: none;
+	color: #6c63ff;
+	padding: 10px;
+}
+
+.checkout_total .total_prefix {
+	flex: 1;
+}
+
+.checkout_total .total_bayar p {
+	margin-right: 30px;
 }
 
 /* Responsive breakpoint */

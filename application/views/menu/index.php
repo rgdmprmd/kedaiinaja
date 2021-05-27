@@ -3,7 +3,7 @@
         <div class="swiper_nav">
             <h3>Menu Kami</h3>
             <div class="filter">
-                <a href="<?= base_url("cart"); ?>" class="btn-cart" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>"><i class="fas fa-shopping-cart"></i> <span class="cart_total"></span></a>
+                <a href="<?= base_url("cart"); ?>" class="btn-cart" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>"><i class="fas fa-fw fa-shopping-cart"></i> <span class="cart_total"></span></a>
                 <select name="category" id="category">
                     <option value="all">All Category</option>
                     <?php foreach($category as $c): ?>
@@ -47,7 +47,6 @@
         get_data('');
 
         $(".dark_mode").click(function() {
-            console.log("daaaa");
             $("body").toggleClass("dark");
             $(".menu-toggle span").toggleClass("darkest");
         });
