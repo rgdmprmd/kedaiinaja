@@ -3,7 +3,7 @@
         <div class="swiper_nav">
             <h3>Menu Kami</h3>
             <div class="filter">
-                <a href="#" class="btn-cart"><i class="fas fa-shopping-cart"></i> <span class="text number">0</span></a>
+                <a href="<?= base_url("cart"); ?>" class="btn-cart" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>"><i class="fas fa-shopping-cart"></i> <span class="cart_total"></span></a>
                 <select name="category" id="category">
                     <option value="all">All Category</option>
                     <?php foreach($category as $c): ?>
@@ -37,6 +37,8 @@
                     search: $("#keyword_search").val()
                 },
                 success: function(hasil) {
+                    console.log(hasil)
+                    $('.cart_total').html(hasil.cart.total_pesanan);
                     $('.menus-container').html(hasil.hasil);
                 }
             });
@@ -61,12 +63,29 @@
         $(document).on('click', '#add-to-cart', function(e) {
             let id = $(this).data('id');
             let user = $(this).data('user');
+            let meja = $('.btn-cart').data('meja');
 
             if (!user) {
                 document.location.href = base_url + 'client_auth';
                 return false;
             }
-            console.log(id, user);
-        })
+
+            $.ajax({
+                url: base_url + 'menu/ajaxAddToCart',
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    uid: user,
+                    makanan: id,
+                    meja: meja
+                },
+                beforeSend: function(hasil) {
+                    $(this).attr('disabled', true);
+                },
+                success: function(hasil) {
+                    get_data('');
+                }
+            });
+        });
     });
 </script>

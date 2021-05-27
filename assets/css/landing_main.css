@@ -269,6 +269,7 @@ section .menu_category .swiper_nav h3::after {
 #keyword_search,
 #category,
 .btn-cart {
+	display: inline-block;
 	background: transparent;
 	border: 1px solid #6c63ff;
 	border-radius: 10px;
@@ -280,6 +281,12 @@ section .menu_category .swiper_nav h3::after {
 
 .btn-cart {
 	text-decoration: none;
+	color: #6c63ff;
+}
+
+.btn-cart:hover {
+	background-color: #6c63ff;
+	color: whitesmoke;
 }
 
 .menus-container {
@@ -499,7 +506,8 @@ section .menu_category .swiper_nav h3::after {
 	}
 
 	#keyword_search,
-	#category {
+	#category,
+	.btn-cart {
 		box-sizing: border-box;
 		width: 100%;
 	}
