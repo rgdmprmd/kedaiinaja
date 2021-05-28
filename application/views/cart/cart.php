@@ -2,6 +2,16 @@
     <div class="menu_category">
         <div class="swiper_nav">
             <h3>Checkout</h3>
+            <select name="meja_id" id="category">
+                <?php if($meja): ?>
+                <option value="<?= $meja_list['detail']['meja_id']; ?>" disabled selected>Meja <?= $meja_list['detail']['meja_nomer']; ?></option>
+                <?php else: ?>
+                <option value="all" disabled selected>Nomer meja</option>
+                <?php foreach($meja_list['all'] as $m): ?>
+                <option value="<?= $m['meja_id']; ?>">Meja <?= $m['meja_nomer']; ?></option>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
         </div>
         <div class="checkout_item">
             <!-- Generate by ajax -->
@@ -22,7 +32,7 @@
 
 <script>
     $(function() {
-        let base_url = '<?= base_url(); ?>';
+        const base_url = '<?= base_url(); ?>';
 
         function get_data(url) {
             if (!url) {
@@ -34,7 +44,6 @@
                 method: 'POST',
                 dataType: 'JSON',
                 success: function(resp) {
-                    console.log(resp)
                     $('.checkout_item').html(resp.hasil);
                     $('.amount').html('Rp. ' + resp.pesanan_total)
                 }

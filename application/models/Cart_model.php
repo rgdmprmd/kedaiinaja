@@ -21,6 +21,14 @@ class Cart_model extends CI_Model
         return $this->db->get_where('pesanan_header', ['pesanan_id' => $id])->row_array();
     }
 
+    public function getMeja($id)
+    {
+        $data['all'] = $this->db->get_where('meja', ['isTaken' => 0])->result_array();
+        $data['detail'] = $this->db->get_where('meja', ['meja_nomer' => $id])->row_array();
+
+        return $data;
+    }
+
     public function delete($id, $key, $table)
     {
         $this->db->delete($table, [$key => $id]);

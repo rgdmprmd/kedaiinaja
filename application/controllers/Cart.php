@@ -12,10 +12,13 @@ class Cart extends CI_Controller
     public function index()
     {
         $data['title'] = 'Cart';
-        $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
         $data['meja'] = $this->input->get('meja');
         $data['type'] = $this->input->get('type');
-        
+        $data['meja_list'] = $this->model->getMeja($data['meja']);
+
+        // print_r($data['meja_list']['all']); exit();
+        $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+
         $this->load->view('templates/client_header', $data);
         $this->load->view('cart/cart', $data);
         $this->load->view('templates/client_footer');
