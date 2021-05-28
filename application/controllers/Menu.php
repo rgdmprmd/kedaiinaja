@@ -26,9 +26,11 @@ class Menu extends CI_Controller
     {
         $search = $this->input->post('search', true);
         $status = $this->input->post('status', true);
+        $meja = $this->input->get('meja');
+        $type = $this->input->get('type');
         $offset = $this->uri->segment(3, 0);
         $email = $this->session->userdata('client_email');
-        $limit  = 20;
+        $limit  = 99;
         
         $menu = $this->model->get_data($search, $status, $email, $limit, $offset);
         $tr = '';
@@ -39,7 +41,6 @@ class Menu extends CI_Controller
             $i = $offset + 1;
             
             foreach($menu['data'] as $m) {
-
                 $tr .= '<div class="card">';
                 $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" alt="" width="200px">';
                 $tr .= '<h3>'.$m['makanan_nama'].'</h3>';

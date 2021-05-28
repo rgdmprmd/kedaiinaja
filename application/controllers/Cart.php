@@ -13,7 +13,9 @@ class Cart extends CI_Controller
     {
         $data['title'] = 'Cart';
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
-
+        $data['meja'] = $this->input->get('meja');
+        $data['type'] = $this->input->get('type');
+        
         $this->load->view('templates/client_header', $data);
         $this->load->view('cart/cart', $data);
         $this->load->view('templates/client_footer');

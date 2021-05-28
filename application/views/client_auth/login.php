@@ -22,7 +22,7 @@
                                 <div class="ex-token" data-extoken="<?= $this->session->flashdata('extoken'); ?>"></div>
                                 <div class="success-reset" data-sreset="<?= $this->session->flashdata('sreset'); ?>"></div>
 
-                                <form class="user mt-5" method="POST" action="<?= base_url(); ?>client_auth/login_user" id="form-login">
+                                <form class="user mt-5" method="POST" action="<?= base_url(); ?>client_auth/login_user" id="form-login" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>">
                                     <div class="form-group">
                                         <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Email address" autocomplete="off" value="<?= set_value('email'); ?>">
                                         <span class="email-error"></span>
@@ -37,7 +37,7 @@
                                     <button type="submit" class="btn btn-primary btn-user btn-block" id="btn-login">Login</button>
                                 </form>
                                 <div class="text-left mt-1">
-                                    <span class=" small text-muted">Need an account? </span><a class="small" href="<?= base_url(); ?>client_auth/registration">Register!</a>
+                                    <span class=" small text-muted">Need an account? </span><a class="small" href="<?= base_url(); ?>client_auth/registration?type=<?= $type; ?>&meja=<?= $meja; ?>">Register!</a>
                                 </div>
                             </div>
                         </div>
@@ -60,8 +60,9 @@
             $('.password-error').html('');
 
             let url = $(this).attr("action");
+            let meja = $(this).data("meja");
+            let type = $(this).data("type");
             let formData = new FormData(this);
-
 
             $.ajax({
                 url: url,
@@ -113,7 +114,7 @@
                             $("#password").val('');
                         });
                     } else if (response.result == 200) {
-                        document.location.href = base_url + 'home';
+                        document.location.href = base_url + `home?type=${type}&meja=${meja}`;
                     }
                 }
             });

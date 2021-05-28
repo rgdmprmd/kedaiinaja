@@ -8,7 +8,7 @@
         </div>
         <div class="checkout_total">
             <div class="tambah_item">
-                <a href="<?= base_url('menu'); ?>"><i class="fas fa-fw fa-plus"></i> Add Item</a>
+                <a href="<?= base_url('menu'); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>"><i class="fas fa-fw fa-plus"></i> Add Item</a>
             </div>
             <div class="total_prefix">
                 <p>Total</p>

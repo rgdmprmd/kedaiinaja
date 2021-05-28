@@ -18,18 +18,18 @@
 <body>
     <nav>
         <div class="container">
-            <h2><a href="<?= base_url("home"); ?>">KEDAI IN AJA</a></h2>
+            <h2><a href="<?= base_url("home"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">KEDAI IN AJA</a></h2>
             <ul>
-                <li><a href="<?= base_url("home"); ?>">Home</a></li>
-                <li><a href="<?= base_url("menu"); ?>">Menu</a></li>
+                <li><a href="<?= base_url("home"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Home</a></li>
+                <li><a href="<?= base_url("menu"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Menu</a></li>
                 <?php if($user): ?>
-                <li><a href="<?= base_url("client_auth/logout"); ?>">Logout</a></li>
+                <li><a href="<?= base_url("client_auth/logout"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Logout</a></li>
                 <li class="mode_icon">
                     <i class="dark_mode fas fa-moon"></i>
                 </li>
                 <li><img src="<?= base_url(); ?>assets/img/profile/<?= $user['user_image']; ?>" alt="<?= $user['user_nama']; ?>" title="<?= $user['user_nama']; ?>" width="40" /></li>
                 <?php else: ?>
-                <li><a href="<?= base_url("client_auth"); ?>">Login</a></li>
+                <li><a href="<?= base_url("client_auth"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Login</a></li>
                 <li class="mode_icon">
                     <i class="dark_mode fas fa-moon"></i>
                 </li>

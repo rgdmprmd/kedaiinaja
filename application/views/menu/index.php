@@ -3,7 +3,7 @@
         <div class="swiper_nav">
             <h3>Menu Kami</h3>
             <div class="filter">
-                <a href="<?= base_url("cart"); ?>" class="btn-cart" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>"><i class="fas fa-fw fa-shopping-cart"></i> <span class="cart_total"></span></a>
+                <a href="<?= base_url("cart"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" class="btn-cart" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>"><i class="fas fa-fw fa-shopping-cart"></i> <span class="cart_total"></span></a>
                 <select name="category" id="category">
                     <option value="all">All Category</option>
                     <?php foreach($category as $c): ?>
@@ -63,9 +63,10 @@
             let id = $(this).data('id');
             let user = $(this).data('user');
             let meja = $('.btn-cart').data('meja');
+            let type = $('.btn-cart').data('type');
 
             if (!user) {
-                document.location.href = base_url + 'client_auth';
+                document.location.href = base_url + `client_auth?type=${type}&meja=${meja}`;
                 return false;
             }
 

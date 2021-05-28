@@ -11,7 +11,7 @@
                             <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                         </div>
                         <!-- Form -->
-                        <form class="user" id="regist_form" method="POST" action="<?= base_url(); ?>client_auth/regist_user">
+                        <form class="user" id="regist_form" method="POST" action="<?= base_url(); ?>client_auth/regist_user" data-meja="<?= $meja; ?>" data-type="<?= $type; ?>">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="Full Name" autocomplete="off">
                                 <span class="nama-error"></span>
@@ -32,7 +32,7 @@
                             <button type="submit" name="submit" id="btn-registration" class="btn btn-primary btn-user btn-block">Continue</button>
                         </form>
                         <div class="text-left mt-1">
-                            <a class="small" href="<?= base_url(); ?>client_auth">Already have an account?</a>
+                            <a class="small" href="<?= base_url(); ?>client_auth?type=<?= $type; ?>&meja=<?= $meja; ?>">Already have an account?</a>
                         </div>
                         <div class="text-left mt-3">
                             <span class="xtra-small">By registering, you agree to Discode's Terms of Service and Privacy Policy</span>
@@ -52,6 +52,8 @@
             e.preventDefault();
 
             let url = $(this).attr('action');
+            let meja = $(this).data("meja");
+            let type = $(this).data("type");
             let formData = new FormData(this);
 
             $.ajax({
@@ -79,7 +81,7 @@
                             title: 'Registrasi Berhasil!',
                             html: "Silahkan cek email kamu untuk melakukan aktivasi. Email aktivasi akan expired dalam 24 jam."
                         }).then((result) => {
-                            document.location.href = base_url + 'client_auth';
+                            document.location.href = base_url + `client_auth?type=${type}&meja=${meja}`;
                         });
                     }
                 },

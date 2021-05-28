@@ -13,6 +13,8 @@ class Home extends CI_Controller
         $data['title'] = "Home";
         $data['category'] = $this->model->getCategory();
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+        $data['type'] = $this->input->get('type');
+        $data['meja'] = $this->input->get('meja');
 
         $this->load->view('templates/client_header', $data);
         $this->load->view('home/index', $data);

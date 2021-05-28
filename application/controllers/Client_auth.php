@@ -12,19 +12,25 @@ class Client_auth extends CI_Controller
     public function index()
     {
         $data['title'] = 'Login';
+        $data['type'] = $this->input->get('type');
+        $data['meja'] = $this->input->get('meja');
+        $data['type'] = $this->input->get('type');
+        $data['meja'] = $this->input->get('meja');
 
         $this->load->view('templates/auth_header', $data);
         $this->load->view('client_auth/login', $data);
-        $this->load->view('templates/auth_footer');
+        $this->load->view('templates/auth_footer', $data);
     }
     
     public function registration()
     {
         $data['title'] = 'Registration';
+        $data['type'] = $this->input->get('type');
+        $data['meja'] = $this->input->get('meja');
 
         $this->load->view('templates/auth_header', $data);
         $this->load->view('client_auth/registration', $data);
-        $this->load->view('templates/auth_footer');
+        $this->load->view('templates/auth_footer', $data);
     }
 
     public function regist_user()
