@@ -17,9 +17,13 @@ class Menu extends CI_Controller
         $data['meja'] = $this->input->get('meja');
         $data['type'] = $this->input->get('type');
 
-        $this->load->view('templates/client_header', $data);
-        $this->load->view('menu/index', $data);
-        $this->load->view('templates/client_footer');
+        $this->load->view('templates/header_client', $data);
+        $this->load->view('menu/menu', $data);
+        $this->load->view('templates/footer_client');
+
+        // $this->load->view('templates/client_header', $data);
+        // $this->load->view('menu/index', $data);
+        // $this->load->view('templates/client_footer');
     }
 
     public function ajaxGetData()

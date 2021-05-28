@@ -16,8 +16,8 @@ class Home extends CI_Controller
         $data['type'] = $this->input->get('type');
         $data['meja'] = $this->input->get('meja');
 
-        $this->load->view('templates/client_header', $data);
-        $this->load->view('home/index', $data);
-        $this->load->view('templates/client_footer');
+        $this->load->view('templates/header_client', $data);
+        $this->load->view('home/home', $data);
+        $this->load->view('templates/footer_client');
     }
 }
