@@ -4,7 +4,7 @@ class Cart_model extends CI_Model
 {
     public function get_data($email)
     {
-        $sql = "SELECT * FROM pesanan_header ph JOIN pesanan_detail pd USING(pesanan_id) JOIN menu_makanan mm USING (makanan_id) WHERE ph.pesanan_status = 88 AND ph.email_input = '{$email}' ORDER BY pd.pesanan_id ASC";
+        $sql = "SELECT * FROM pesanan_header ph JOIN pesanan_detail pd USING(pesanan_id) LEFT JOIN meja mj USING (meja_id) JOIN menu_makanan mm USING (makanan_id) WHERE ph.pesanan_status = 88 AND ph.email_input = '{$email}' ORDER BY pd.pesanan_id ASC";
         $data['data'] = $this->db->query($sql)->result_array();
 
         return $data;
@@ -21,12 +21,48 @@ class Cart_model extends CI_Model
         return $this->db->get_where('pesanan_header', ['pesanan_id' => $id])->row_array();
     }
 
-    public function getMeja($id)
+    public function getMeja($id=null)
     {
-        $data['all'] = $this->db->get_where('meja', ['isTaken' => 0])->result_array();
-        $data['detail'] = $this->db->get_where('meja', ['meja_nomer' => $id])->row_array();
+        ($id) ? $data['detail'] = $this->db->get_where('meja', ['meja_nomer' => $id])->row_array() : $data['detail'] = '';
+        $data['all'] = $this->db->get_where('meja', ['isTaken' => 0])->result_array( );
 
         return $data;
+    }
+
+    public function getAllMeja($offset = 0, $limit = 0, $search = null)
+    {
+        ($search != null) ? $w_search = " AND meja_nomer LIKE '%{$search}%'" : $w_search = "";
+
+        $sql = "SELECT * FROM meja WHERE isTaken = 0 {$w_search}";
+
+        $total = $this->db->query($sql)->num_rows();
+
+        if ($limit > 0) {
+            $sql .= " ORDER BY meja_id ASC LIMIT {$offset}, {$limit} ";
+        }
+
+        $data = $this->db->query($sql)->result_array();
+
+        $rowResult = array();
+        $result = array();
+
+        if ($data) {
+            foreach ($data as $d) {
+                $result['id']       = $d['meja_id'];
+                $result['text']     = $d['meja_nomer'];
+                $result['status']   = true;
+
+                array_push($rowResult, $result);
+            }
+        } else {
+            $result['id'] = null;
+            $result['text'] = 'Oops, meja tidak ditemukan.';
+            $result['status'] = '404';
+
+            array_push($rowResult, $result);
+        }
+
+        return array('results' => $rowResult, 'total' => $total);
     }
 
     public function delete($id, $key, $table)

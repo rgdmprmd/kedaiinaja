@@ -15,13 +15,15 @@ class Cart extends CI_Controller
         $data['meja'] = $this->input->get('meja');
         $data['type'] = $this->input->get('type');
         $data['meja_list'] = $this->model->getMeja($data['meja']);
-
-        // print_r($data['meja_list']['all']); exit();
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 
-        $this->load->view('templates/client_header', $data);
-        $this->load->view('cart/cart', $data);
-        $this->load->view('templates/client_footer');
+        // $this->load->view('templates/client_header', $data);
+        // $this->load->view('cart/cart', $data);
+        // $this->load->view('templates/client_footer');
+        
+        $this->load->view('templates/header_client', $data);
+        $this->load->view('cart/index', $data);
+        $this->load->view('templates/footer_client');
     }
 
     public function ajaxGetData()
@@ -53,10 +55,24 @@ class Cart extends CI_Controller
         $result = [
             'result' => true,
             'hasil' => $tr,
+            'cart' => $cart['data'][0],
             'pesanan_total' => ($cart['data']) ? number_format($cart['data'][0]['pesanan_total']) : 0
         ];
 
         echo json_encode($result);
+    }
+
+    public function ajaxGetMeja()
+    {
+        $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $limit = $this->input->get('limit') ? $this->input->get('limit') : 3;
+        $search = $this->input->get('search', true);
+
+        $offset = ($page - 1) * $limit;
+
+        $jenisMenu = $this->model->getAllMeja($offset, $limit, $search);
+
+        echo json_encode($jenisMenu);
     }
 
     public function ajaxUpdateQty()
