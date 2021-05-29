@@ -1,9 +1,9 @@
 <div class="container">
     <div class="row mt-5">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <h4>Menu Kami</h4>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             <div class="d-none d-md-block">
                 <form class="form-inline d-flex justify-content-end">
                     <div class="form-group">
@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="row mt-5 menu-container">
+    <div class="row mt-3 menu-container">
         <!-- ajax -->
     </div>
 </div>

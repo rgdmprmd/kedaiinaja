@@ -42,9 +42,9 @@ class Menu extends CI_Controller
             $i = $offset + 1;
             
             foreach($menu['data'] as $m) {
-                $tr .= '<div class="col-md-3 mb-3">';
-                $tr .= '<div class="card">';
-                $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" class="card-img-top" alt="'.$m['makanan_nama'].'">';
+                $tr .= '<div class="col-lg-3 col-md-4 col-6 mb-3">';
+                $tr .= '<div class="card food-card">';
+                $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" class="card-img-top imgs" alt="'.$m['makanan_nama'].'">';
                 $tr .= '<div class="card-body">';
                 $tr .= '<h5 class="card-title">'.$m['makanan_nama'].'</h5>';
                 $tr .= '<p class="card-text">Harga : Rp. '.number_format($m['makanan_harga']).'</p>';
