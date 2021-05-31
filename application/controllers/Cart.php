@@ -35,16 +35,61 @@ class Cart extends CI_Controller
 
         if(count($cart['data']) > 0) {
             foreach($cart['data'] as $m) {
-                $tr .= '<div class="checkout_card">';
-                $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" alt="food image">';
-                $tr .= '<div class="checkout_title">';
-                $tr .= '<h4>'.$m['makanan_nama'].'</h4>';
-                $tr .= '<p>Rp. '.number_format($m['makanan_harga']).'</p>';
+                // $tr .= '<div class="checkout_card">';
+                // $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" alt="food image">';
+                // $tr .= '<div class="checkout_title">';
+                // $tr .= '<h4>'.$m['makanan_nama'].'</h4>';
+                // $tr .= '<p>Rp. '.number_format($m['makanan_harga']).'</p>';
+                // $tr .= '</div>';
+                // $tr .= '<p class="qty"><a href="#" class="btn-qty btn-minus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="-"><i class="fas fa-fw fa-minus"></i></a>'.$m['qty_pesanan'].'x<a href="#" class="btn-qty btn-plus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="+"><i class="fas fa-fw fa-plus"></i></a></p>';
+                // $tr .= '<p class="total_harga">Rp. '.number_format($m['total_pesanan']).'</p>';
+                // $tr .= '<a href="#" class="checkout_delete" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'"><i class="fas fa-fw fa-times"></i></a>';
+                // $tr .= '</div>';
+
+                $tr .= '<div class="col-md-12 mb-3">';
+                $tr .= '<div class="card">';
+                $tr .= '<div class="card-body">';
+                $tr .= '<div class="d-none d-md-block">';
+                $tr .= '<div class="row">';
+                $tr .= '<div class="col-md-2 align-self-center">';
+                $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" class="img-thumbnail" alt="" width="100">';
                 $tr .= '</div>';
-                $tr .= '<p class="qty"><a href="#" class="btn-qty btn-minus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="-"><i class="fas fa-fw fa-minus"></i></a>'.$m['qty_pesanan'].'x<a href="#" class="btn-qty btn-plus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="+"><i class="fas fa-fw fa-plus"></i></a></p>';
-                $tr .= '<p class="total_harga">Rp. '.number_format($m['total_pesanan']).'</p>';
-                $tr .= '<a href="#" class="checkout_delete" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'"><i class="fas fa-fw fa-times"></i></a>';
+                $tr .= '<div class="col-md-10 align-self-center">';
+                $tr .= '<div class="row">';
+                $tr .= '<div class="col-md-12">';
+                $tr .= '<p>'.$m['makanan_nama'].'</p>';
                 $tr .= '</div>';
+                $tr .= '<div class="col-md-1">';
+                $tr .= '<button type="button" class="btn btn-sm btn-outline-danger checkout_delete" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'"><i class="fas fa-fw fa-trash small"></i></button>';
+                $tr .= '</div>';
+                $tr .= '<div class="col-md-5">';
+                $tr .= '<button class="btn btn-sm btn-outline-success mr-2 btn-qty" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="-"><i class="fas fa-minus small"></i></button>';
+                $tr .= '<span>'.$m['qty_pesanan'].'x</span>';
+                $tr .= '<button class="btn btn-sm btn-outline-success ml-2 btn-qty" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="+"><i class="fas fa-plus small"></i></button>';
+                $tr .= '</div>';
+                $tr .= '<div class="col-md-6 text-right">';
+                $tr .= '<p>Rp. '.number_format($m['total_pesanan']).'</p>';
+                $tr .= '</div></div></div></div></div>';
+
+                $tr .= '<div class="d-sm-block d-md-none">';
+                $tr .= '<div class="row">';
+                $tr .= '<div class="col-5">';
+                $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" class="img-thumbnail" alt="" width="100%">';
+                $tr .= '</div>';
+                $tr .= '<div class="col-7">';
+                $tr .= '<div class="row">';
+                $tr .= '<div class="col-12">';
+                $tr .= '<p>'.$m['makanan_nama'].'</p>';
+                $tr .= '<p>Rp. '.number_format($m['total_pesanan']).'</p>';
+                $tr .= '</div>';
+                $tr .= '<div class="col-9">';
+                $tr .= '<button class="btn btn-sm btn-outline-success mr-2 btn-qty" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="-"><i class="fas fa-minus small"></i></button>';
+                $tr .= '<span>'.$m['qty_pesanan'].'x</span>';
+                $tr .= '<button class="btn btn-sm btn-outline-success ml-2 btn-qty" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="+"><i class="fas fa-plus small"></i></button>';
+                $tr .= '</div>';
+                $tr .= '<div class="col-3 text-right">';
+                $tr .= '<button type="button" class="btn btn-sm btn-outline-danger checkout_delete" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'"><i class="fa fa-trash small"></i></button>';
+                $tr .= '</div></div></div></div></div></div></div></div>';
             }
         } else {
             $tr .= '<tr>';

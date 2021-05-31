@@ -7,7 +7,7 @@
             <div class="d-none d-md-block">
                 <form class="form-inline d-flex justify-content-end">
                     <div class="form-group">
-                        <a href="<?= base_url("cart"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" class="btn btn-outline-success"><i class="fas fa-fw fa-shopping-cart"></i> <span class="cart_total">30000</span></a>
+                        <a href="<?= base_url("cart"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" class="btn btn-outline-success"><i class="fas fa-fw fa-shopping-cart"></i> <span class="cart_total"></span></a>
                     </div>
                     <div class="form-group ml-1">
                         <select name="category" id="category" class="custom-select">
