@@ -1,4 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding");
+
+if ( "OPTIONS" === $_SERVER['REQUEST_METHOD'] ) {
+    die();
+}
 
 class Cart extends CI_Controller
 {
@@ -7,6 +14,11 @@ class Cart extends CI_Controller
         parent::__construct();
         $this->load->model('Cart_model', 'model');
         $this->load->library('pagination');
+        
+        $params = array('server_key' => 'SB-Mid-server-rOppPix03bf6s1J_kFywI9C9', 'production' => false);
+		$this->load->library('midtrans');
+		$this->midtrans->config($params);
+		$this->load->helper('url');	
     }
 
     public function index()

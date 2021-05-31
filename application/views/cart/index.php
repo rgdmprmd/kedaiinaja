@@ -49,6 +49,7 @@
     </form>
 </div>
 
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-HYBocWzI84ET2NEh"></script>
 <script>
     $(function() {
         const base_url = '<?= base_url(); ?>';
