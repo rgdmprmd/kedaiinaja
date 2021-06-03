@@ -77,14 +77,15 @@ class Menu extends CI_Controller
         $uid = $this->input->post('uid', true);
         $makanan = $this->input->post('makanan', true);
         $meja = $this->input->post('meja', true);
+        $type = $this->input->post('type', true);
 
         $food = $this->model->getFoodDetail($makanan);
         $pesanan_id = $this->model->getPesananByEmail($uid);
 
         if(!$pesanan_id) {
-            $this->_pesanan_baru($food, $meja, $uid);
+            $this->_pesanan_baru($food, $meja, $type, $uid);
         } else {
-            $this->_pesanan_update($food, $meja, $uid, $pesanan_id);
+            $this->_pesanan_update($food, $meja, $type, $uid, $pesanan_id);
         }
 
         $result = [
@@ -109,7 +110,7 @@ class Menu extends CI_Controller
         return $this->pagination->create_links();
     }
 
-    private function _pesanan_baru($food, $meja, $uid)
+    private function _pesanan_baru($food, $meja, $type, $uid)
     {
         $meja_id = "";
         if($meja) {
@@ -118,6 +119,8 @@ class Menu extends CI_Controller
 
         $header = [
             'meja_id' => ($meja_id) ? $meja_id['meja_id'] : null,
+            'type' => ($type) ? $type : null,
+            'payment_type' => null,
             'jumlah_tamu' => ($meja_id) ? $meja_id['kursi_tersedia'] : null,
             'pesanan_total' => $food['makanan_harga'],
             'pesanan_status' => 88,
@@ -150,7 +153,7 @@ class Menu extends CI_Controller
         return false;
     }
 
-    private function _pesanan_update($food, $meja, $uid, $pesanan_id)
+    private function _pesanan_update($food, $meja, $type, $uid, $pesanan_id)
     {
         $pesanan_duplicate = $this->model->getDetailByIDPesanan($pesanan_id['pesanan_id'], $food['makanan_id']);
 

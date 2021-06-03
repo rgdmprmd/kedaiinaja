@@ -18,6 +18,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/select2.min.js"></script>
+    <script src="<?= base_url(); ?>assets/js/sweetalert2/sweetalert2.all.min.js"></script>
+
 
     <title><?= $title; ?></title>
 </head>
@@ -34,8 +36,14 @@
                     <a class="nav-link align-self-center" href="<?= base_url("home"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Home</a>
                     <a class="nav-link align-self-center" href="<?= base_url("menu"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Menu</a>
                     <?php if($user): ?>
-                    <a class="nav-link align-self-center" href="<?= base_url("order"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Order</a>
-                    <div class="dropdown">
+
+                    <?php if($order): ?>
+                    <a class="nav-link align-self-center" href="<?= base_url("order"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Order <small class="badge badge-sm badge-success small"><?= count($order); ?></small></a>
+                    <?php else: ?>
+                    <a class="nav-link align-self-center" href="<?= base_url("order"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Order </a>
+                    <?php endif; ?>
+
+                    <div class="dropdown align-self-center">
                         <a class="nav-link align-self-center dropdown-toggle" id="navbarDropdownMenuLink" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" data-toggle="dropdown"><img src="<?= base_url('assets/img/profile/'. $user['user_image']); ?>" alt="profile" class="img-thumbnail rounded-circle" width="40"></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="#">Another action</a>

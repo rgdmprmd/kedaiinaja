@@ -152,7 +152,7 @@ class Snap extends CI_Controller {
 			"dt_update" => Date("Y-m-d H:i:s"),
 		];
 
-		// $insertTrans = $this->model->insert($data);
+		$insertTrans = $this->model->insert($data);
 
 		if($insertTrans) {
 			echo "Request pembayaran berhasil dilakukan silahkan segera melakukan pembayaran";

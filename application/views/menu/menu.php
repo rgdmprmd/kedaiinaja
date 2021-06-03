@@ -107,7 +107,8 @@
                 data: {
                     uid: user,
                     makanan: id,
-                    meja: meja
+                    meja: meja,
+                    type
                 },
                 beforeSend: function(hasil) {
                     $(this).attr('disabled', true);

@@ -16,6 +16,12 @@ class Cart_model extends CI_Model
         return $this->db->query($sql)->row_array();
     }
 
+    public function getDetailByHeader($id)
+    {
+        $sql = "SELECT * FROM pesanan_detail pd JOIN menu_makanan mm USING (makanan_id) WHERE pd.pesanan_id = {$id}";
+        return $this->db->query($sql)->result_array();
+    }
+    
     public function getHeaderById($id)
     {
         return $this->db->get_where('pesanan_header', ['pesanan_id' => $id])->row_array();
@@ -74,5 +80,7 @@ class Cart_model extends CI_Model
     {
         $this->db->where($key, $id);
         $this->db->update($table, $data);
+
+        return true;
     }
 }

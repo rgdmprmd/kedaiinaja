@@ -28,6 +28,7 @@ class Cart extends CI_Controller
         $data['type'] = $this->input->get('type');
         $data['meja_list'] = $this->model->getMeja($data['meja']);
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+        $data['order'] = $this->db->get_where('pesanan_header', ['pesanan_status' => 0, 'email_input' => $this->session->userdata('client_email')])->result_array();
 
         // $this->load->view('templates/client_header', $data);
         // $this->load->view('cart/cart', $data);
@@ -47,17 +48,6 @@ class Cart extends CI_Controller
 
         if(count($cart['data']) > 0) {
             foreach($cart['data'] as $m) {
-                // $tr .= '<div class="checkout_card">';
-                // $tr .= '<img src="'.base_url().'assets/img/food_porn/'.$m['makanan_img'].'" alt="food image">';
-                // $tr .= '<div class="checkout_title">';
-                // $tr .= '<h4>'.$m['makanan_nama'].'</h4>';
-                // $tr .= '<p>Rp. '.number_format($m['makanan_harga']).'</p>';
-                // $tr .= '</div>';
-                // $tr .= '<p class="qty"><a href="#" class="btn-qty btn-minus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="-"><i class="fas fa-fw fa-minus"></i></a>'.$m['qty_pesanan'].'x<a href="#" class="btn-qty btn-plus" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'" data-type="+"><i class="fas fa-fw fa-plus"></i></a></p>';
-                // $tr .= '<p class="total_harga">Rp. '.number_format($m['total_pesanan']).'</p>';
-                // $tr .= '<a href="#" class="checkout_delete" data-id="'.$m['detpesanan_id'].'" data-pesananid="'.$m['pesanan_id'].'"><i class="fas fa-fw fa-times"></i></a>';
-                // $tr .= '</div>';
-
                 $tr .= '<div class="col-md-12 mb-3">';
                 $tr .= '<div class="card">';
                 $tr .= '<div class="card-body">';
@@ -215,5 +205,99 @@ class Cart extends CI_Controller
         ];
 
         echo json_encode($result);
+    }
+
+    public function ajaxDropStatus()
+    {
+        $pesanan = $this->input->post('pesanan');
+        $payment = $this->input->post('payment');
+
+        $header = $this->model->getHeaderById($pesanan);
+        $detail = $this->model->getDetailByHeader($pesanan);
+        $user = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+
+        if($payment == "cashless") {
+            $transaction_details = [
+                'order_id' => rand(),
+                'gross_amount' => $header['pesanan_total'], // no decimal allowed for creditcard
+            ];
+
+		    $item_details = [];
+            foreach($detail as $det) {
+                $item_details[] = [
+                    'id' => $det['detpesanan_id'],
+                    'price' => $det['makanan_harga'],
+                    'quantity' => $det['qty_pesanan'],
+                    'name' => $det['makanan_nama']
+                ];
+            }
+
+            $customer_details = [
+                'first_name'    => $user['user_nama'],
+                'last_name'     => '',
+                'email'         => $user['user_email'],
+                'phone'         => '',
+                'billing_address'  => '',
+                'shipping_address' => ''
+            ];
+
+            $credit_card['secure'] = true;
+
+            $time = time();
+            $custom_expiry = [
+                'start_time' => date("Y-m-d H:i:s O", $time),
+                'unit' => 'minute', 
+                'duration'  => 15
+            ];
+            
+            $transaction_data = [
+                'transaction_details'=> $transaction_details,
+                'item_details'       => $item_details,
+                'customer_details'   => $customer_details,
+                'credit_card'        => $credit_card,
+                'expiry'             => $custom_expiry
+            ];
+
+            // print_r($transaction_data); exit();
+
+            error_log(json_encode($transaction_data));
+            $snapToken = $this->midtrans->getSnapToken($transaction_data);
+            error_log($snapToken);
+
+		    echo json_encode($snapToken);
+        } else {
+            $header = [
+                'payment_type' => $payment,
+                'pesanan_status' => 0,
+                'dateModified' => Date("Y-m-d H:i:s"),
+                'email_update' => $this->session->userdata('client_email')
+            ];
+    
+            $update = $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
+    
+            $detail = [
+                'detpesanan_status' => 0,
+                'dateModified' => Date("Y-m-d H:i:s"),
+                'email_update' => $this->session->userdata('client_email')
+            ];
+    
+            $update = $this->model->update($detail, 'pesanan_id', $pesanan, 'pesanan_detail');
+    
+            if($update) {
+                $result = [
+                    'result' => true,
+                    'message' => 'update status'
+                ];
+        
+                echo json_encode($result);
+            } else {
+                $result = [
+                    'result' => false,
+                    'message' => 'update status'
+                ];
+        
+                echo json_encode($result);
+            }
+        }
     }
 }
