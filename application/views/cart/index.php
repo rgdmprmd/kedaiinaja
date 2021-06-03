@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-12 text-right">
                 <button type="button" id="checkout_btn" class="btn btn-success">Checkout</button>
             </div>
@@ -167,7 +167,6 @@
                     type
                 },
                 success: function(resp) {
-                    console.log(resp)
                     get_data('');
                 }
             });

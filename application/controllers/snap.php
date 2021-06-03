@@ -33,6 +33,7 @@ class Snap extends CI_Controller {
 		$this->load->library('midtrans');
 		$this->midtrans->config($params);
 		$this->load->helper('url');	
+		$this->load->model('Snap_model', 'model');
     }
 
     public function index()
@@ -42,6 +43,7 @@ class Snap extends CI_Controller {
 
     public function token()
     {
+		$pesanan = $this->model->getPesanan();
 		
 		// Required
 		$transaction_details = array(
@@ -129,9 +131,33 @@ class Snap extends CI_Controller {
     public function finish()
     {
     	$result = json_decode($this->input->post('result_data'));
-    	echo 'RESULT <br><pre>';
-    	var_dump($result);
-    	echo '</pre>' ;
+		$data = [
+			"status_code" => $result->status_code,
+			"status_message" => $result->status_message,
+			"transaction_id" => $result->transaction_id,
+			"order_id" => $result->order_id,
+			"gross_amount" => $result->gross_amount,
+			"payment_type" => $result->payment_type,
+			"transaction_time" => Date("Y-m-d H:i:s", strtotime($result->transaction_time)),
+			"transaction_status" => $result->transaction_status,
+			"pdf_url" => (isset($result->pdf_url)) ? $result->pdf_url : null,
+			"finish_redirect_url" => $result->finish_redirect_url,
+			"fraud_status" => $result->fraud_status,
+			"bank" => (isset($result->va_numbers[0]->bank)) ? $result->va_numbers[0]->bank : null,
+			"va_number" => (isset($result->va_numbers[0]->va_number)) ? $result->va_numbers[0]->va_number : null,
+			"bca_va_number" => (isset($result->bca_va_number)) ? $result->bca_va_number : null,
+			"permata_va_number" => (isset($result->permata_va_number)) ? $result->permata_va_number : null,
+			"bill_key" => (isset($result->bill_key)) ? $result->bill_key : null,
+			"biller_code" => (isset($result->biller_code)) ? $result->biller_code : null,
+			"dt_update" => Date("Y-m-d H:i:s"),
+		];
 
+		// $insertTrans = $this->model->insert($data);
+
+		if($insertTrans) {
+			echo "Request pembayaran berhasil dilakukan silahkan segera melakukan pembayaran";
+		} else {
+			echo "Request pembayaran gagal dilakukan.";
+		}
     }
 }

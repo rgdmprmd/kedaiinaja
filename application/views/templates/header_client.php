@@ -34,8 +34,15 @@
                     <a class="nav-link align-self-center" href="<?= base_url("home"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Home</a>
                     <a class="nav-link align-self-center" href="<?= base_url("menu"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Menu</a>
                     <?php if($user): ?>
-                    <a class="nav-link align-self-center" href="<?= base_url("client_auth/logout"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Logout</a>
-                    <a class="nav-link align-self-center" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>"><img src="<?= base_url('assets/img/profile/'. $user['user_image']); ?>" alt="profile" class="img-thumbnail rounded-circle" width="40"></a>
+                    <a class="nav-link align-self-center" href="<?= base_url("order"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Order</a>
+                    <div class="dropdown">
+                        <a class="nav-link align-self-center dropdown-toggle" id="navbarDropdownMenuLink" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" data-toggle="dropdown"><img src="<?= base_url('assets/img/profile/'. $user['user_image']); ?>" alt="profile" class="img-thumbnail rounded-circle" width="40"></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Profile</a>
+                            <a class="dropdown-item" href="<?= base_url("client_auth/logout"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Logout</a>
+                        </div>
+                    </div>
                     <?php else: ?>
                     <a class="nav-link align-self-center" href="<?= base_url("client_auth"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Login</a>
                     <?php endif; ?>
