@@ -123,7 +123,8 @@
                     return {
                         search: params.term,
                         page: params.page,
-                        limit: 20
+                        limit: 200,
+                        chair: $("#jumlah_tamu").val()
                     }
                 },
                 processResults: function(data, params) {

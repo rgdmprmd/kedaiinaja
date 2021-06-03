@@ -131,6 +131,17 @@ class Snap extends CI_Controller {
     public function finish()
     {
     	$result = json_decode($this->input->post('result_data'));
+
+		if(isset($result->va_numbers[0]->bank)) {
+			$bank = $result->va_numbers[0]->bank;
+		} else if(isset($result->permata_va_number)) {
+			$bank = "permata";
+		} else if(isset($result->bill_key) || isset($result->biller_code)) {
+			$bank = "mandiri";
+		} else {
+			$bank = null;
+		}
+
 		$data = [
 			"status_code" => $result->status_code,
 			"status_message" => $result->status_message,
@@ -143,7 +154,7 @@ class Snap extends CI_Controller {
 			"pdf_url" => (isset($result->pdf_url)) ? $result->pdf_url : null,
 			"finish_redirect_url" => $result->finish_redirect_url,
 			"fraud_status" => $result->fraud_status,
-			"bank" => (isset($result->va_numbers[0]->bank)) ? $result->va_numbers[0]->bank : null,
+			"bank" => $bank,
 			"va_number" => (isset($result->va_numbers[0]->va_number)) ? $result->va_numbers[0]->va_number : null,
 			"bca_va_number" => (isset($result->bca_va_number)) ? $result->bca_va_number : null,
 			"permata_va_number" => (isset($result->permata_va_number)) ? $result->permata_va_number : null,
@@ -152,7 +163,8 @@ class Snap extends CI_Controller {
 			"dt_update" => Date("Y-m-d H:i:s"),
 		];
 
-		$insertTrans = $this->model->insert($data);
+		print_r($result); exit();
+		// $insertTrans = $this->model->insert($data);
 
 		if($insertTrans) {
 			echo "Request pembayaran berhasil dilakukan silahkan segera melakukan pembayaran";

@@ -35,11 +35,12 @@ class Cart_model extends CI_Model
         return $data;
     }
 
-    public function getAllMeja($offset = 0, $limit = 0, $search = null)
+    public function getAllMeja($chair=0, $offset = 0, $limit = 0, $search = null)
     {
+        ($chair) ? $w_chair = " AND kursi_tersedia <= {$chair} " : $w_chair = "";
         ($search != null) ? $w_search = " AND meja_nomer LIKE '%{$search}%'" : $w_search = "";
 
-        $sql = "SELECT * FROM meja WHERE isTaken = 0 {$w_search}";
+        $sql = "SELECT * FROM meja WHERE isTaken = 0 {$w_chair} {$w_search}";
 
         $total = $this->db->query($sql)->num_rows();
 

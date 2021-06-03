@@ -114,10 +114,11 @@ class Cart extends CI_Controller
         $page = $this->input->get('page') ? $this->input->get('page') : 1;
         $limit = $this->input->get('limit') ? $this->input->get('limit') : 3;
         $search = $this->input->get('search', true);
+        $chair = $this->input->get('chair', true);
 
         $offset = ($page - 1) * $limit;
 
-        $jenisMenu = $this->model->getAllMeja($offset, $limit, $search);
+        $jenisMenu = $this->model->getAllMeja($chair, $offset, $limit, $search);
 
         echo json_encode($jenisMenu);
     }
