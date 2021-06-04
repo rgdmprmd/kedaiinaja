@@ -259,9 +259,9 @@
                             $("#result-data").val(JSON.stringify(resp));
                         }
 
-                        $('#payment-form').attr('action', base_url + 'cart/finish?token=' + resp);
+                        $('#payment-form').attr('action', base_url + 'cart/finish?pesanan=' + resp.pesanan + '&token=' + resp.token);
 
-                        snap.pay(resp, {
+                        snap.pay(resp.token, {
                             onSuccess: function(result) {
                                 changeResult('success', result);
                                 console.log(result.status_message);
@@ -281,9 +281,9 @@
                         });
                     } else {
                         if (resp.result == false) {
-                            $('.error_nama').html(resp.error.makananjenis_nama);
+                            $('.error_nama').html('haaaaa');
                         } else {
-                            location.href = base_url + 'cart/finish?token=';
+                            location.href = base_url + 'cart/finish?pesanan=' + resp.pesanan + '&token=';
                         }
                     }
                 }

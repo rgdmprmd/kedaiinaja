@@ -223,22 +223,22 @@ class Cart extends CI_Controller
         $detail = $this->model->getDetailByHeader($pesanan);
         $user = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 
-        $header = [
+        $headerData = [
             'payment_type' => $payment,
             'pesanan_status' => 0,
             'dateModified' => Date("Y-m-d H:i:s"),
             'email_update' => $this->session->userdata('client_email')
         ];
 
-        $update = $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
+        $update = $this->model->update($headerData, 'pesanan_id', $pesanan, 'pesanan_header');
 
-        $detail = [
+        $detailData = [
             'detpesanan_status' => 0,
             'dateModified' => Date("Y-m-d H:i:s"),
             'email_update' => $this->session->userdata('client_email')
         ];
 
-        $update = $this->model->update($detail, 'pesanan_id', $pesanan, 'pesanan_detail');
+        $update = $this->model->update($detailData, 'pesanan_id', $pesanan, 'pesanan_detail');
 
         if($payment == "cashless") {
             $transaction_details = [
@@ -288,19 +288,27 @@ class Cart extends CI_Controller
             $snapToken = $this->midtrans->getSnapToken($transaction_data);
             error_log($snapToken);
 
-		    echo json_encode($snapToken);
+            $result = [
+                'result' => true,
+                'pesanan' => $pesanan,
+                'token' => $snapToken
+            ];
+    
+            echo json_encode($result);
         } else {
             if($update) {
                 $result = [
                     'result' => true,
-                    'message' => 'update status'
+                    'pesanan' => $pesanan,
+                    'token' => ''
                 ];
         
                 echo json_encode($result);
             } else {
                 $result = [
                     'result' => false,
-                    'message' => 'update status'
+                    'pesanan' => $pesanan,
+                    'token' => ''
                 ];
         
                 echo json_encode($result);
@@ -310,6 +318,7 @@ class Cart extends CI_Controller
 
     public function finish()
     {
+        $pesananid = $this->input->get('pesanan');
         $token = $this->input->get('token');
         $result = json_decode($this->input->post('result_data'));
 
@@ -325,6 +334,7 @@ class Cart extends CI_Controller
             }
     
             $data = [
+                "pesanan_id" => $pesananid,
                 "status_code" => $result->status_code,
                 "status_message" => $result->status_message,
                 "transaction_id" => $result->transaction_id,
@@ -344,15 +354,39 @@ class Cart extends CI_Controller
                 "biller_code" => (isset($result->biller_code)) ? $result->biller_code : null,
                 "dt_update" => Date("Y-m-d H:i:s"),
             ];
-    
-            // print_r($result); exit();
-            // $insertTrans = $this->model->insert('tb_transaction', $data);
-    
-            if($insertTrans) {
-                $data['result'] = $result;
-            } else {
-                echo "Request pembayaran gagal dilakukan.";
-            }
+        } else {
+            $pesanan = $this->db->get_where('pesanan_header', ['pesanan_id' => $pesananid, 'payment_type' => 'cash', 'email_input' => $this->session->userdata('client_email')])->row_array();
+            
+            $data = [
+                "pesanan_id" => $pesananid,
+                "status_code" => 201,
+                "status_message" => 'Transaksi sedang diproses',
+                "transaction_id" => null,
+                "order_id" => null,
+                "gross_amount" => $pesanan['pesanan_total'],
+                "payment_type" => 'cash',
+                "transaction_time" => Date("Y-m-d H:i:s"),
+                "transaction_status" => 'pending',
+                "pdf_url" => null,
+                "finish_redirect_url" => null,
+                "fraud_status" => null,
+                "bank" => null,
+                "va_number" => null,
+                "bca_va_number" => null,
+                "permata_va_number" => null,
+                "bill_key" => null,
+                "biller_code" => null,
+                "dt_update" => Date("Y-m-d H:i:s"),
+            ];
+        }
+
+        // print_r($result); exit();
+        $insertTrans = $this->model->insert('tb_transaction', $data);
+
+        if($insertTrans) {
+            $data['result'] = $result;
+        } else {
+            echo "Request pembayaran gagal dilakukan.";
         }
 
         $data['meja'] = "";
@@ -369,26 +403,26 @@ class Cart extends CI_Controller
 
 // stdClass Object
 // (
-//     [status_code] => 201
-//     [status_message] => Transaksi sedang diproses
-//     [transaction_id] => 75c14f03-7aa9-4618-b9d0-e08998c0e892
-//     [order_id] => 2012260650
-//     [gross_amount] => 10000.00
-//     [payment_type] => bank_transfer
-//     [transaction_time] => 2021-06-04 14:16:17
-//     [transaction_status] => pending
-//     [va_numbers] => Array
-//         (
-//             [0] => stdClass Object
-//                 (
-//                     [bank] => bca
-//                     [va_number] => 89622919780
-//                 )
+        // [status_code] => 201
+        // [status_message] => Transaksi sedang diproses
+        // [transaction_id] => 75c14f03-7aa9-4618-b9d0-e08998c0e892
+        // [order_id] => 2012260650
+        // [gross_amount] => 10000.00
+        // [payment_type] => bank_transfer
+        // [transaction_time] => 2021-06-04 14:16:17
+        // [transaction_status] => pending
+        // [va_numbers] => Array
+        //     (
+        //         [0] => stdClass Object
+        //             (
+        //                 [bank] => bca
+        //                 [va_number] => 89622919780
+        //             )
 
-//         )
+        //     )
 
-//     [fraud_status] => accept
-//     [bca_va_number] => 89622919780
-//     [pdf_url] => https://app.sandbox.midtrans.com/snap/v1/transactions/4b099730-4cc6-4486-88f6-d3407a8c848c/pdf
-//     [finish_redirect_url] => http://example.com?order_id=2012260650&status_code=201&transaction_status=pending
+        // [fraud_status] => accept
+        // [bca_va_number] => 89622919780
+        // [pdf_url] => https://app.sandbox.midtrans.com/snap/v1/transactions/4b099730-4cc6-4486-88f6-d3407a8c848c/pdf
+        // [finish_redirect_url] => http://example.com?order_id=2012260650&status_code=201&transaction_status=pending
 // )
