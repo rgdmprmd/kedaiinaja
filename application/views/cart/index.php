@@ -3,6 +3,7 @@
         display: none;
     }
 </style>
+
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-HYBocWzI84ET2NEh"></script>
 
 <div class="container">
@@ -67,7 +68,7 @@
     </form>
 </div>
 
-<form id="payment-form" method="post" action="<?= base_url() ?>snap/finish">
+<form id="payment-form" method="post" action="<?= base_url() ?>cart/finish">
     <input type="hidden" name="result_type" id="result-type" value=""></div>
     <input type="hidden" name="result_data" id="result-data" value=""></div>
 </form>
@@ -258,6 +259,8 @@
                             $("#result-data").val(JSON.stringify(resp));
                         }
 
+                        $('#payment-form').attr('action', base_url + 'cart/finish?token=' + resp);
+
                         snap.pay(resp, {
                             onSuccess: function(result) {
                                 changeResult('success', result);
@@ -280,18 +283,9 @@
                         if (resp.result == false) {
                             $('.error_nama').html(resp.error.makananjenis_nama);
                         } else {
-                            Swal.fire({
-                                icon: 'success',
-                                width: 600,
-                                padding: '2em',
-                                title: 'Order Berhasil',
-                                html: "Segera selesaikan pembayaranmu, agar pesananmu dapat kami proses."
-                            }).then((result) => {
-                                location.reload();
-                            });
+                            location.href = base_url + 'cart/finish?token=';
                         }
                     }
-
                 }
             });
         });

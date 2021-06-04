@@ -84,4 +84,9 @@ class Cart_model extends CI_Model
 
         return true;
     }
+
+    public function insert($table, $data)
+    {
+        return $this->db->insert($table, $data);
+    }
 }

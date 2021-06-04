@@ -223,6 +223,23 @@ class Cart extends CI_Controller
         $detail = $this->model->getDetailByHeader($pesanan);
         $user = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
 
+        $header = [
+            'payment_type' => $payment,
+            'pesanan_status' => 0,
+            'dateModified' => Date("Y-m-d H:i:s"),
+            'email_update' => $this->session->userdata('client_email')
+        ];
+
+        $update = $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
+
+        $detail = [
+            'detpesanan_status' => 0,
+            'dateModified' => Date("Y-m-d H:i:s"),
+            'email_update' => $this->session->userdata('client_email')
+        ];
+
+        $update = $this->model->update($detail, 'pesanan_id', $pesanan, 'pesanan_detail');
+
         if($payment == "cashless") {
             $transaction_details = [
                 'order_id' => rand(),
@@ -273,23 +290,6 @@ class Cart extends CI_Controller
 
 		    echo json_encode($snapToken);
         } else {
-            $header = [
-                'payment_type' => $payment,
-                'pesanan_status' => 0,
-                'dateModified' => Date("Y-m-d H:i:s"),
-                'email_update' => $this->session->userdata('client_email')
-            ];
-    
-            $update = $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
-    
-            $detail = [
-                'detpesanan_status' => 0,
-                'dateModified' => Date("Y-m-d H:i:s"),
-                'email_update' => $this->session->userdata('client_email')
-            ];
-    
-            $update = $this->model->update($detail, 'pesanan_id', $pesanan, 'pesanan_detail');
-    
             if($update) {
                 $result = [
                     'result' => true,
@@ -307,4 +307,88 @@ class Cart extends CI_Controller
             }
         }
     }
+
+    public function finish()
+    {
+        $token = $this->input->get('token');
+        $result = json_decode($this->input->post('result_data'));
+
+        if($token) {
+            if(isset($result->va_numbers[0]->bank)) {
+                $bank = $result->va_numbers[0]->bank;
+            } else if(isset($result->permata_va_number)) {
+                $bank = "permata";
+            } else if(isset($result->bill_key) || isset($result->biller_code)) {
+                $bank = "mandiri";
+            } else {
+                $bank = null;
+            }
+    
+            $data = [
+                "status_code" => $result->status_code,
+                "status_message" => $result->status_message,
+                "transaction_id" => $result->transaction_id,
+                "order_id" => $result->order_id,
+                "gross_amount" => $result->gross_amount,
+                "payment_type" => $result->payment_type,
+                "transaction_time" => Date("Y-m-d H:i:s", strtotime($result->transaction_time)),
+                "transaction_status" => $result->transaction_status,
+                "pdf_url" => (isset($result->pdf_url)) ? $result->pdf_url : null,
+                "finish_redirect_url" => $result->finish_redirect_url,
+                "fraud_status" => $result->fraud_status,
+                "bank" => $bank,
+                "va_number" => (isset($result->va_numbers[0]->va_number)) ? $result->va_numbers[0]->va_number : null,
+                "bca_va_number" => (isset($result->bca_va_number)) ? $result->bca_va_number : null,
+                "permata_va_number" => (isset($result->permata_va_number)) ? $result->permata_va_number : null,
+                "bill_key" => (isset($result->bill_key)) ? $result->bill_key : null,
+                "biller_code" => (isset($result->biller_code)) ? $result->biller_code : null,
+                "dt_update" => Date("Y-m-d H:i:s"),
+            ];
+    
+            // print_r($result); exit();
+            // $insertTrans = $this->model->insert('tb_transaction', $data);
+    
+            if($insertTrans) {
+                $data['result'] = $result;
+            } else {
+                echo "Request pembayaran gagal dilakukan.";
+            }
+        }
+
+        $data['meja'] = "";
+        $data['type'] = "";
+        $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+        $data['order'] = $this->db->get_where('pesanan_header', ['pesanan_status' => 0, 'email_input' => $this->session->userdata('client_email')])->result_array();
+        $data['title'] = "Checkout Berhasil";
+
+        $this->load->view('templates/header_client', $data);
+        $this->load->view('cart/finish', $data);
+        $this->load->view('templates/footer_client');
+    }
 }
+
+// stdClass Object
+// (
+//     [status_code] => 201
+//     [status_message] => Transaksi sedang diproses
+//     [transaction_id] => 75c14f03-7aa9-4618-b9d0-e08998c0e892
+//     [order_id] => 2012260650
+//     [gross_amount] => 10000.00
+//     [payment_type] => bank_transfer
+//     [transaction_time] => 2021-06-04 14:16:17
+//     [transaction_status] => pending
+//     [va_numbers] => Array
+//         (
+//             [0] => stdClass Object
+//                 (
+//                     [bank] => bca
+//                     [va_number] => 89622919780
+//                 )
+
+//         )
+
+//     [fraud_status] => accept
+//     [bca_va_number] => 89622919780
+//     [pdf_url] => https://app.sandbox.midtrans.com/snap/v1/transactions/4b099730-4cc6-4486-88f6-d3407a8c848c/pdf
+//     [finish_redirect_url] => http://example.com?order_id=2012260650&status_code=201&transaction_status=pending
+// )
