@@ -14,6 +14,7 @@ class Menu extends CI_Controller
         $data['title'] = 'Menu';
         $data['category'] = $this->model->getCategory();
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+        $data['order'] = $this->db->get_where('pesanan_header', ['pesanan_status' => 0, 'email_input' => $this->session->userdata('client_email')])->result_array();
         $data['meja'] = $this->input->get('meja');
         $data['type'] = $this->input->get('type');
 
@@ -112,10 +113,7 @@ class Menu extends CI_Controller
 
     private function _pesanan_baru($food, $meja, $type, $uid)
     {
-        $meja_id = "";
-        if($meja) {
-            $meja_id = $this->model->getMejaIDByName($meja);
-        }
+        ($meja) ? $meja_id = $this->model->getMejaIDByName($meja) : $meja_id = "";
 
         $header = [
             'meja_id' => ($meja_id) ? $meja_id['meja_id'] : null,
@@ -185,7 +183,12 @@ class Menu extends CI_Controller
         }
 
 
+        ($meja) ? $meja_id = $this->model->getMejaIDByName($meja) : $meja_id = "";
+
         $header = [
+            'meja_id' => ($meja_id) ? $meja_id['meja_id'] : null,
+            'type' => ($type) ? $type : null,
+            'jumlah_tamu' => ($meja_id) ? $meja_id['kursi_tersedia'] : null,
             'pesanan_total' => $pesanan_id['pesanan_total']+$food['makanan_harga'],
             'dateModified' => Date("Y-m-d H:i:s"),
             'email_update' => $uid

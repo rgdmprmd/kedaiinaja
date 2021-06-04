@@ -189,16 +189,22 @@ class Cart extends CI_Controller
         
         $pesanandetail = $this->model->getDetailById($id);
         $pesananheader = $this->model->getHeaderById($pesanan);
+        $countdetail = $this->model->getDetailByHeader($pesanan);
+
+        if(count($countdetail) == 1) {
+            $this->model->delete($pesanan, 'pesanan_id', 'pesanan_header');
+        } else {
+            $header = [
+                'pesanan_total' => $pesananheader['pesanan_total']-$pesanandetail['total_pesanan'],
+                'dateModified' => Date("Y-m-d H:i:s"),
+                'email_update' => $this->session->userdata('client_email')
+            ];
+    
+            $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
+        }
 
         $this->model->delete($id, 'detpesanan_id', 'pesanan_detail');
 
-        $header = [
-            'pesanan_total' => $pesananheader['pesanan_total']-$pesanandetail['total_pesanan'],
-            'dateModified' => Date("Y-m-d H:i:s"),
-            'email_update' => $this->session->userdata('client_email')
-        ];
-
-        $this->model->update($header, 'pesanan_id', $pesanan, 'pesanan_header');
 
         $result = [
             'result' => true,

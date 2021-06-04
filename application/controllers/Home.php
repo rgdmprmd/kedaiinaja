@@ -13,6 +13,7 @@ class Home extends CI_Controller
         $data['title'] = "Home";
         $data['category'] = $this->model->getCategory();
         $data['user'] = $this->db->get_where('users', ['user_email' => $this->session->userdata('client_email')])->row_array();
+        $data['order'] = $this->db->get_where('pesanan_header', ['pesanan_status' => 0, 'email_input' => $this->session->userdata('client_email')])->result_array();
         $data['type'] = $this->input->get('type');
         $data['meja'] = $this->input->get('meja');
 

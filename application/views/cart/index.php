@@ -14,7 +14,7 @@
             <div class="col-md-3" id="form-group">
                 <div class="form-group">
                     <label for="jumlah_tamu">Jumlah Tamu</label>
-                    <input type="number" class="form-control" name="jumlah_tamu" id="jumlah_tamu" min="1" max="8">
+                    <input type="number" class="form-control" name="jumlah_tamu" id="jumlah_tamu" min="1" max="8" value="1">
                 </div>
             </div>
             <div class="col-md-3" id="form-group">
@@ -212,7 +212,7 @@
                     pesanan
                 },
                 success: function(resp) {
-                    get_data('');
+                    location.reload();
                 }
             });
         });
