@@ -44,7 +44,9 @@
                     <?php endif; ?>
 
                     <div class="dropdown align-self-center">
-                        <a class="nav-link align-self-center dropdown-toggle" id="navbarDropdownMenuLink" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" data-toggle="dropdown"><img src="<?= base_url('assets/img/profile/'. $user['user_image']); ?>" alt="profile" class="img-thumbnail rounded-circle" width="40"></a>
+                        <a class="nav-link align-self-center dropdown-toggle" id="navbarDropdownMenuLink" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>" data-toggle="dropdown">
+                            Hi, <?= explode(' ', $user['user_nama'])[0]; ?>
+                        </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="#">Another action</a>
                             <a class="dropdown-item" href="<?= base_url("profile"); ?>?type=<?= $type; ?>&meja=<?= $meja; ?>">Profile</a>
