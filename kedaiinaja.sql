@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2021 at 11:33 AM
+-- Generation Time: Jun 05, 2021 at 11:44 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -248,7 +248,10 @@ INSERT INTO `menu_makanan` (`makanan_id`, `makananjenis_id`, `makanan_nama`, `ma
 (3, 5, 'Rainbow Drink', '3 layer warna warni campuran dari berbagai rasa.', 'a538aec499d96767452b8186902fb150.jpg', 13000, 8000, 1, '2021-05-20 09:31:50', NULL, 'bonuslupis@gmail.com', NULL),
 (4, 5, 'Green Lemon Soda', 'Campuran antara soda dan fresh lemon.', 'a797d15d37b61a33f644d2e6207b2195.jpg', 13000, 8000, 1, '2021-05-20 09:32:49', NULL, 'bonuslupis@gmail.com', NULL),
 (5, 2, 'Ayam Gepuk', 'Paket lengkap ayam gepuk, nasi, dan es teh.', '44bfb0fd82c6109eebcc0d883f0f778c.jpg', 20000, 12000, 1, '2021-05-20 09:43:52', NULL, 'bonuslupis@gmail.com', NULL),
-(6, 1, 'Indomie Rebus', 'Indomie rebus dengan level pedas 1-5.', '927f80696561603c3295784323a500a0.jpg', 10000, 5000, 1, '2021-05-20 09:59:37', '2021-05-20 10:03:23', 'bonuslupis@gmail.com', 'bonuslupis@gmail.com');
+(6, 1, 'Indomie Rebus', 'Indomie rebus dengan level pedas 1-5.', '927f80696561603c3295784323a500a0.jpg', 10000, 5000, 1, '2021-05-20 09:59:37', '2021-05-20 10:03:23', 'bonuslupis@gmail.com', 'bonuslupis@gmail.com'),
+(7, 5, 'Red Velvet', 'Perpaduan rasa cake yang manis dan gurih.', '53196f6baa687206e5720bff6ac0c5ca.jpg', 13000, 8000, 1, '2021-05-21 09:38:54', NULL, 'bonuslupis@gmail.com', NULL),
+(8, 5, 'Dark Coco', 'Untuk si pecinta coklat.', '7aaa66453a9027d5e4b20b7060cb2594.jpg', 13000, 8000, 1, '2021-05-21 09:40:42', NULL, 'bonuslupis@gmail.com', NULL),
+(9, 5, 'Matcha Latte', 'Dengan bubuk matcha racikan spesial.', '773e8a3d76f5b5819bd0a63bf670ad32.jpg', 13000, 8000, 1, '2021-05-21 09:41:53', NULL, 'bonuslupis@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -269,6 +272,14 @@ CREATE TABLE `pesanan_detail` (
   `email_update` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `pesanan_detail`
+--
+
+INSERT INTO `pesanan_detail` (`detpesanan_id`, `pesanan_id`, `makanan_id`, `qty_pesanan`, `total_pesanan`, `detpesanan_status`, `dateCreated`, `dateModified`, `email_input`, `email_update`) VALUES
+(9, 8, 6, 1, 10000, 0, '2021-06-04 16:08:41', '2021-06-04 16:38:17', 'rnggdmsprmd@gmail.com', 'rnggdmsprmd@gmail.com'),
+(10, 8, 2, 1, 15000, 0, '2021-06-04 16:08:52', '2021-06-04 16:38:17', 'rnggdmsprmd@gmail.com', 'rnggdmsprmd@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -278,6 +289,8 @@ CREATE TABLE `pesanan_detail` (
 CREATE TABLE `pesanan_header` (
   `pesanan_id` int(11) NOT NULL,
   `meja_id` int(11) DEFAULT NULL,
+  `type` enum('dinein','takeaway') DEFAULT NULL,
+  `payment_type` enum('cash','cashless') DEFAULT NULL,
   `jumlah_tamu` int(11) DEFAULT NULL,
   `pesanan_total` int(11) DEFAULT NULL,
   `pesanan_status` int(11) DEFAULT NULL,
@@ -286,6 +299,13 @@ CREATE TABLE `pesanan_header` (
   `email_input` varchar(128) DEFAULT NULL,
   `email_update` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pesanan_header`
+--
+
+INSERT INTO `pesanan_header` (`pesanan_id`, `meja_id`, `type`, `payment_type`, `jumlah_tamu`, `pesanan_total`, `pesanan_status`, `dateCreated`, `dateModified`, `email_input`, `email_update`) VALUES
+(8, 2, 'dinein', 'cashless', 2, 25000, 0, '2021-06-04 16:08:40', '2021-06-04 16:38:17', 'rnggdmsprmd@gmail.com', 'rnggdmsprmd@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -353,6 +373,42 @@ INSERT INTO `submenu` (`submenu_id`, `menu_id`, `submenu_nama`, `submenu_url`, `
 (13, 6, 'Menu', 'waiters/menu', 'fas fa-fw fa-scroll', 1, '2020-11-02 11:09:52', '2020-11-02 11:09:52', 'bonuslupis@gmail.com', 'bonuslupis@gmail.com'),
 (14, 6, 'Pesanan', 'waiters/pesanan', 'fas fa-fw fa-user-tag', 1, '2020-11-02 11:10:23', '2020-11-02 11:10:23', 'bonuslupis@gmail.com', 'bonuslupis@gmail.com'),
 (15, 4, 'Payment', 'manager/payment', 'fas fa-fw fa-cash-register', 1, '2020-11-02 16:23:00', '2020-11-02 16:23:00', 'bonuslupis@gmail.com', 'bonuslupis@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_transaction`
+--
+
+CREATE TABLE `tb_transaction` (
+  `id` int(11) NOT NULL,
+  `pesanan_id` int(11) DEFAULT NULL,
+  `status_code` varchar(3) DEFAULT NULL,
+  `status_message` varchar(80) DEFAULT NULL,
+  `transaction_id` varchar(100) DEFAULT NULL,
+  `order_id` varchar(10) DEFAULT NULL,
+  `gross_amount` decimal(20,2) DEFAULT NULL,
+  `payment_type` varchar(40) DEFAULT NULL,
+  `transaction_time` datetime DEFAULT NULL,
+  `transaction_status` varchar(40) DEFAULT NULL,
+  `bank` varchar(40) DEFAULT NULL,
+  `va_number` varchar(40) DEFAULT NULL,
+  `fraud_status` varchar(40) DEFAULT NULL,
+  `bca_va_number` varchar(40) DEFAULT NULL,
+  `permata_va_number` varchar(40) DEFAULT NULL,
+  `pdf_url` varchar(200) DEFAULT NULL,
+  `finish_redirect_url` varchar(200) DEFAULT NULL,
+  `bill_key` varchar(20) DEFAULT NULL,
+  `biller_code` varchar(5) DEFAULT NULL,
+  `dt_update` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tb_transaction`
+--
+
+INSERT INTO `tb_transaction` (`id`, `pesanan_id`, `status_code`, `status_message`, `transaction_id`, `order_id`, `gross_amount`, `payment_type`, `transaction_time`, `transaction_status`, `bank`, `va_number`, `fraud_status`, `bca_va_number`, `permata_va_number`, `pdf_url`, `finish_redirect_url`, `bill_key`, `biller_code`, `dt_update`) VALUES
+(1, 8, '201', 'Transaksi sedang diproses', 'bc525436-12a7-48d7-9985-7e484b037e74', '1534519974', '25000.00', 'bank_transfer', '2021-06-04 16:38:33', 'pending', 'bca', '89622052902', 'accept', '89622052902', NULL, 'https://app.sandbox.midtrans.com/snap/v1/transactions/4abb064c-6fff-45e0-902b-e7a6705e0bb6/pdf', 'http://example.com?order_id=1534519974&status_code=201&transaction_status=pending', NULL, NULL, '2021-06-04 16:38:38');
 
 -- --------------------------------------------------------
 
@@ -469,6 +525,12 @@ ALTER TABLE `submenu`
   ADD PRIMARY KEY (`submenu_id`);
 
 --
+-- Indexes for table `tb_transaction`
+--
+ALTER TABLE `tb_transaction`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `token`
 --
 ALTER TABLE `token`
@@ -524,19 +586,19 @@ ALTER TABLE `menu_jenis`
 -- AUTO_INCREMENT for table `menu_makanan`
 --
 ALTER TABLE `menu_makanan`
-  MODIFY `makanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `makanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
-  MODIFY `detpesanan_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `detpesanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `pesanan_header`
 --
 ALTER TABLE `pesanan_header`
-  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -549,6 +611,12 @@ ALTER TABLE `role`
 --
 ALTER TABLE `submenu`
   MODIFY `submenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `tb_transaction`
+--
+ALTER TABLE `tb_transaction`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `token`
