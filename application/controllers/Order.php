@@ -58,7 +58,7 @@ class Order extends CI_Controller
                     $payment_type = '<span>Payment method</span> <strong>'.ucfirst($m['payment_type']).'</strong>';
                     $is_hide = 'hide';
                 } else {
-                    $payment_type = '<span>Payment method</span> <strong>'.strtoupper($bank).'</strong>';
+                    $payment_type = '<span>Payment method</span> <strong>'.strtoupper($bank).' <a href="'.$m['pdf_url'].'" target="_blank" class="text-success small">(cara bayar)</a></strong>';
                     $is_hide = '';
                 }
 
@@ -67,7 +67,7 @@ class Order extends CI_Controller
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4><strong>'.ucfirst($m['transaction_status']).'</strong></h4>
+                                    <h4><strong>'.ucfirst($m['transaction_status']).' #'.$m['order_id'].'</strong></h4>
                                 </div>
                                 <div class="col-md-6">
                                     <span>Transaction on</span> <strong>'.Date("M d, Y", strtotime($m['transaction_time'])).'</strong>
