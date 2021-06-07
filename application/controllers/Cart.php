@@ -271,7 +271,7 @@ class Cart extends CI_Controller
             $custom_expiry = [
                 'start_time' => date("Y-m-d H:i:s O", $time),
                 'unit' => 'minute', 
-                'duration'  => 15
+                'duration'  => 1440 // 1 day
             ];
             
             $transaction_data = [
@@ -353,6 +353,7 @@ class Cart extends CI_Controller
                 "bill_key" => (isset($result->bill_key)) ? $result->bill_key : null,
                 "biller_code" => (isset($result->biller_code)) ? $result->biller_code : null,
                 "dt_update" => Date("Y-m-d H:i:s"),
+                "email_update" => $this->session->userdata('client_email')
             ];
         } else {
             $pesanan = $this->db->get_where('pesanan_header', ['pesanan_id' => $pesananid, 'payment_type' => 'cash', 'email_input' => $this->session->userdata('client_email')])->row_array();
@@ -377,6 +378,7 @@ class Cart extends CI_Controller
                 "bill_key" => null,
                 "biller_code" => null,
                 "dt_update" => Date("Y-m-d H:i:s"),
+                "email_update" => $this->session->userdata('client_email')
             ];
         }
 
