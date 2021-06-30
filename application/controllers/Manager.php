@@ -26,7 +26,7 @@ class Manager extends CI_Controller
 
     public function ajaxNewMeja()
     {
-        $this->form_validation->set_rules('meja_nomer', 'nomer meja', 'required|trim');
+        $this->form_validation->set_rules('meja_nomer', 'nomer meja', 'required|trim|is_unique[meja.meja_nomer]', ['is_unique' => 'Nomer meja exists!']);
         $this->form_validation->set_rules('jumlah_kursi', 'jumlah kursi', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) {
@@ -54,24 +54,24 @@ class Manager extends CI_Controller
             }
 
             $this->load->library('ciqrcode'); //pemanggilan library QR CODE
- 
+
             $config['cacheable']    = true; //boolean, the default is true
             $config['cachedir']     = './assets/'; //string, the default is application/cache/
             $config['errorlog']     = './assets/'; //string, the default is application/logs/
             $config['imagedir']     = './assets/img/qrtable/'; //direktori penyimpanan qr code
             $config['quality']      = true; //boolean, the default is true
             $config['size']         = '1024'; //interger, the default is 1024
-            $config['black']        = array(224,255,255); // array, default is array(255,255,255)
-            $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+            $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+            $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
             $this->ciqrcode->initialize($config);
-    
-            $image_name=$nomerMeja.'.png'; //buat name dari qr code sesuai dengan nim
-    
-            $params['data'] = base_url()."menu?type=dinein&meja=".$nomerMeja; //data yang akan di jadikan QR CODE
+
+            $image_name = $nomerMeja . '.png'; //buat name dari qr code sesuai dengan nim
+
+            $params['data'] = base_url() . "menu?type=dinein&meja=" . $nomerMeja; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=
             $params['size'] = 10;
-            $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
-            $this->ciqrcode->generate($params); 
+            $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+            $this->ciqrcode->generate($params);
 
             $data = [
                 'jenismeja_id' => $jenisMeja,
@@ -273,7 +273,7 @@ class Manager extends CI_Controller
                 $cr .= '<div class="col-lg-3 mb-3">';
                 $cr .= '<div class="card card-meja">';
                 $cr .= '<a href="#" class="streched-links meja-edit" data-id="' . $m['meja_id'] . '" data-toggle="modal" data-target="#newMeja">';
-                $cr .= '<img src="' . base_url() . 'assets/img/qrtable/'.$m['meja_nomer'].'.png" class="card-img-top p-3 gambar-meja" width="20px">';
+                $cr .= '<img src="' . base_url() . 'assets/img/qrtable/' . $m['meja_nomer'] . '.png" class="card-img-top p-3 gambar-meja" width="20px">';
                 $cr .= '</a>';
                 $cr .= '<div class="card-body">';
                 if ($m['isTaken'] == 1) {
@@ -468,9 +468,9 @@ class Manager extends CI_Controller
             foreach ($data['data'] as $m) {
                 ($m['makananjenis_status'] == 1) ? $makananStats = "" : $makananStats = "text-danger";
                 $tr .= '<tr>';
-                $tr .= '<td class="text-center '.$makananStats.'">' . $i . '</td>';
-                $tr .= '<td class="text-left '.$makananStats.'">' . $m['makananjenis_nama'] . '</td>';
-                $tr .= '<td class="text-center '.$makananStats.'">';
+                $tr .= '<td class="text-center ' . $makananStats . '">' . $i . '</td>';
+                $tr .= '<td class="text-left ' . $makananStats . '">' . $m['makananjenis_nama'] . '</td>';
+                $tr .= '<td class="text-center ' . $makananStats . '">';
                 $tr .= '<a href="" class="btn btn-sm btn-success btn-sm px-3 jenismenu-edit" data-id="' . $m['makananjenis_id'] . '" data-toggle="modal" data-target="#newJenisMenu" title="Update Category"><i class="fas fa-fw fa-edit"></i></a>';
                 $tr .= '</td>';
                 $tr .= '</tr>';
@@ -708,10 +708,10 @@ class Manager extends CI_Controller
 
                 ($m['makanan_status'] == 1) ? $makananStats = "" : $makananStats = "text-danger";
                 $tr .= '<tr>';
-                $tr .= '<td class="text-center '.$makananStats.'">' . $i . '</td>';
-                $tr .= '<td class="text-left '.$makananStats.'">' . $m['makanan_nama'] . '</td>';
-                $tr .= '<td class="text-left '.$makananStats.'">' . $m['makananjenis_nama'] . '</td>';
-                $tr .= '<td class="text-right '.$makananStats.'">' . number_format($m['makanan_hpp'], 0, '.', ',') . ' - ' . number_format($m['makanan_harga'], 0, '.', ',') . '</td>';
+                $tr .= '<td class="text-center ' . $makananStats . '">' . $i . '</td>';
+                $tr .= '<td class="text-left ' . $makananStats . '">' . $m['makanan_nama'] . '</td>';
+                $tr .= '<td class="text-left ' . $makananStats . '">' . $m['makananjenis_nama'] . '</td>';
+                $tr .= '<td class="text-right ' . $makananStats . '">' . number_format($m['makanan_hpp'], 0, '.', ',') . ' - ' . number_format($m['makanan_harga'], 0, '.', ',') . '</td>';
                 $tr .= '<td class="text-center">';
                 $tr .= '<a href="" class="btn btn-success btn-sm px-3 menu-edit" data-id="' . $m['makanan_id'] . '" data-toggle="modal" data-target="#newMenuMakanan" title="Update Menu"><i class="fas fa-fw fa-edit"></i></a>';
                 $tr .= '</td>';
