@@ -7,11 +7,11 @@ class Order extends CI_Controller
         parent::__construct();
         $this->load->model('Order_model', 'model');
         $this->load->library('pagination');
-        
+
         $params = array('server_key' => 'SB-Mid-server-rOppPix03bf6s1J_kFywI9C9', 'production' => false);
-		$this->load->library('midtrans');
-		$this->midtrans->config($params);
-		$this->load->helper('url');	
+        $this->load->library('midtrans');
+        $this->midtrans->config($params);
+        $this->load->helper('url');
     }
 
     public function index()
@@ -32,13 +32,13 @@ class Order extends CI_Controller
     {
         $status = $this->input->post('status');
         $email = $this->session->userdata('client_email');
-        
+
         $cart = $this->model->get_data($email, $status);
         $tr = '';
 
-        if(count($cart['data']) > 0) {
-            foreach($cart['data'] as $m) {
-                if($m['bca_va_number']) {
+        if (count($cart['data']) > 0) {
+            foreach ($cart['data'] as $m) {
+                if ($m['bca_va_number']) {
                     $virtual_account = $m['bca_va_number'];
                 } else if ($m['permata_va_number']) {
                     $virtual_account = $m['permata_va_number'];
@@ -48,17 +48,17 @@ class Order extends CI_Controller
                     $virtual_account = '';
                 }
 
-                if(!$m['bank'] && $m['permata_va_number']) {
+                if (!$m['bank'] && $m['permata_va_number']) {
                     $bank = "permata";
                 } else {
                     $bank = $m['bank'];
                 }
 
-                if($m['payment_type'] == "cash") {
-                    $payment_type = '<span>Payment method</span> <strong>'.ucfirst($m['payment_type']).'</strong>';
+                if ($m['payment_type'] == "cash") {
+                    $payment_type = '<span>Payment method</span> <strong>' . ucfirst($m['payment_type']) . '</strong>';
                     $is_hide = 'hide';
                 } else {
-                    $payment_type = '<span>Payment method</span> <strong>'.strtoupper($bank).' <a href="'.$m['pdf_url'].'" target="_blank" class="text-success small">(cara bayar)</a></strong>';
+                    $payment_type = '<span>Payment method</span> <strong>' . strtoupper($bank) . ' <a href="' . $m['pdf_url'] . '" target="_blank" class="text-success small">(cara bayar)</a></strong>';
                     $is_hide = '';
                 }
 
@@ -67,20 +67,20 @@ class Order extends CI_Controller
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4><strong>'.ucfirst($m['transaction_status']).' #'.$m['order_id'].'</strong></h4>
+                                    <h4><strong>' . ucfirst($m['transaction_status']) . ' #' . $m['order_id'] . '</strong></h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <span>Transaction on</span> <strong>'.Date("M d, Y", strtotime($m['transaction_time'])).'</strong>
+                                    <span>Transaction on</span> <strong>' . Date("M d, Y", strtotime($m['transaction_time'])) . '</strong>
                                 </div>
                                 <div class="col-md-6">
-                                    <span>Pay before</span> <strong>'.Date("M d, Y", strtotime('+1 day', strtotime($m['transaction_time']))).'</strong>
+                                    <span>Pay before</span> <strong>' . Date("M d, Y", strtotime('+1 day', strtotime($m['transaction_time']))) . '</strong>
                                 </div>
                                 <div class="col-md-12 mt-4">
-                                    '.$payment_type.'
+                                    ' . $payment_type . '
                                 </div>
-                                <div class="col-md-12 '.$is_hide.'">
+                                <div class="col-md-12 ' . $is_hide . '">
                                     <span>Virtual account</span>
-                                    <a class="text-success copy_toclipboard" data-clipboard-target="#va_number"><strong>'.$virtual_account.'</strong><i class="fas fa-copy ml-2"></i></a>
+                                    <a class="text-success copy_toclipboard" data-clipboard-target="#va_number"><strong>' . $virtual_account . '</strong><i class="fas fa-copy ml-2"></i></a>
                                     <span class="copied"></span>
                                 </div>
                                 <div class="col-md-12 mt-3">
@@ -96,19 +96,19 @@ class Order extends CI_Controller
                                             </tr>
                                         </thead>
                                         <tbody>';
-                                            $pesanandata = $this->model->get_detail($m['pesanan_id']);
-                                            foreach($pesanandata as $ps) {
-                                                $tr .= '<tr>
-                                                    <td class="text-left">'.str_pad($ps['qty_pesanan'], 2, "0", STR_PAD_LEFT).'</td>
-                                                    <td><strong>'.$ps['makanan_nama'].'</strong></td>
-                                                    <td class="text-right">Rp. '.number_format($ps['total_pesanan']).'</td>
+                $pesanandata = $this->model->get_detail($m['pesanan_id']);
+                foreach ($pesanandata as $ps) {
+                    $tr .= '<tr>
+                                                    <td class="text-left">' . str_pad($ps['qty_pesanan'], 2, "0", STR_PAD_LEFT) . '</td>
+                                                    <td><strong>' . $ps['makanan_nama'] . '</strong></td>
+                                                    <td class="text-right">Rp. ' . number_format($ps['total_pesanan']) . '</td>
                                                 </tr>';
-                                            }
-                                        $tr .= '</tbody>
+                }
+                $tr .= '</tbody>
                                         <tfoot>
                                             <tr>
                                                 <td class="text-left" colspan="2">Total Bayar</td>
-                                                <td class="text-right"><strong>Rp. '.number_format($m['pesanan_total']).'</strong></td>
+                                                <td class="text-right"><strong>Rp. ' . number_format($m['pesanan_total']) . '</strong></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -132,5 +132,30 @@ class Order extends CI_Controller
         ];
 
         echo json_encode($result);
+    }
+
+    public function notification()
+    {
+        // $json_result = $this->input->post(null, true);
+        $result = json_encode($this->input->raw_input_stream, true);
+
+        // if ($result) {
+        // $notif = $this->midtrans->status($result->order_id);
+
+        // $data = [
+        //     'status_code' => $notif->status_code,
+        //     'status_message' => $notif->status_message,
+        //     'transaction_status' => $notif->transaction_status,
+        //     'dt_update' => Date('Y-m-d H:i:s'),
+        // ];
+
+        // $updated = $this->model->update('tb_transaction', $data, 'order_id', $notif->order_id);
+
+        // if($updated) {
+        //     return json_encode(['response' => true]);
+        // }
+
+        // }
+        return json_encode(['message' => 'Result Found', 'data' => $result]);
     }
 }

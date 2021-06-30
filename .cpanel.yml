@@ -1,0 +1,7 @@
+---
+deployment:
+  task:
+    - export DEPLOYPATH=/home/u1363818/public_html/kedaiinaja/application/
+    - /bin/cp/application -R controllers $DEPLOYPATH
+    - /bin/cp/application -R models $DEPLOYPATH
+    - /bin/cp/application -R views $DEPLOYPATH
