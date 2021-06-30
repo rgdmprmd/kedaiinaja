@@ -79,7 +79,7 @@ class Auth extends CI_Controller
                         'result' => 200,
                         'error' => $user['role_id']
                     ];
-        
+
                     echo json_encode($result);
                 } else {
                     // Jika tidak sesuai, tampilkan pesan kesalahan
@@ -87,7 +87,7 @@ class Auth extends CI_Controller
                         'result' => 403,
                         'error' => $email
                     ];
-        
+
                     echo json_encode($result);
 
                     // $this->session->set_flashdata('wpass', 'password');
@@ -99,7 +99,7 @@ class Auth extends CI_Controller
                     'result' => 402,
                     'error' => $email
                 ];
-    
+
                 echo json_encode($result);
 
                 // $this->session->set_flashdata('aemail', $email);
@@ -199,7 +199,7 @@ class Auth extends CI_Controller
                 'result' => true,
                 'error' => ''
             ];
-            
+
             echo json_encode($result);
         }
     }
@@ -209,11 +209,11 @@ class Auth extends CI_Controller
     {
         // Config standar untuk sendEmail menggunakan GMAIL
         $config = [
-            'protocol'  => 'smtp',
+            'protocol'  => 'ssmtp',
             'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
             'smtp_user' => getenv('SMTP_EMAIL'),
             'smtp_pass' => getenv('SMTP_PASSWORD'),
-            'smtp_port' => 465,
             'mailtype'  => 'html',
             'charset'   => 'utf-8',
             'newline'   => "\r\n"
@@ -308,7 +308,7 @@ class Auth extends CI_Controller
         }
 
         $data['title'] = 'Forgot Password';
-        
+
         $this->load->view('templates/auth_header', $data);
         $this->load->view('auth/forgot-password');
         $this->load->view('templates/auth_footer');
@@ -348,14 +348,14 @@ class Auth extends CI_Controller
                     'result' => true,
                     'error' => 'Please check your email to reset your password.'
                 ];
-                
+
                 echo json_encode($result);
             } else {
                 $result = [
                     'result' => 'error-email',
                     'error' => $email
                 ];
-                
+
                 echo json_encode($result);
             }
         }
@@ -463,10 +463,9 @@ class Auth extends CI_Controller
         // unset session yang ada
         $this->session->unset_userdata('email');
         $this->session->unset_userdata('role_id');
-        
+
         // Tampilkan pesan logout berhasil
         $this->session->set_flashdata('logout', 'Logout');
         redirect('auth');
-        
     }
 }
