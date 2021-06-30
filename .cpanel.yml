@@ -1,6 +1,6 @@
 ---
 deployment:
-  task:
+  tasks:
     - export DEPLOYPATH=/home/u1363818/public_html/kedaiinaja/application/
     - /bin/cp/ -R application/controllers $DEPLOYPATH
     - /bin/cp/ -R application/models $DEPLOYPATH
