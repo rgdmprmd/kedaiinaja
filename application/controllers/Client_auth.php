@@ -176,8 +176,8 @@ class Client_auth extends CI_Controller
         // 'smtp_host' => 'ssl://smtp.googlemail.com',
         $config = [
             'protocol'  => 'smtp',
-            'smtp_host' => 'tls://smtp.gmail.com',
-            'smtp_port' => 587,
+            'smtp_host' => 'ssl://smtp.gmail.com',
+            'smtp_port' => 465,
             'smtp_user' => getenv('SMTP_EMAIL'),
             'smtp_pass' => getenv('SMTP_PASSWORD'),
             'mailtype'  => 'html',
