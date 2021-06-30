@@ -175,8 +175,8 @@ class Client_auth extends CI_Controller
         // Config standar untuk sendEmail menggunakan GMAIL
         // 'smtp_host' => 'ssl://smtp.googlemail.com',
         $config = [
-            'protocol'  => 'smtp',
-            'smtp_host' => 'ssl://smtp.gmail.com',
+            'protocol'  => 'ssmtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
             'smtp_port' => 465,
             'smtp_user' => getenv('SMTP_EMAIL'),
             'smtp_pass' => getenv('SMTP_PASSWORD'),
