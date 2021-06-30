@@ -5,6 +5,6 @@ class Home_model extends CI_Model
 {
     public function getCategory()
     {
-        return $this->db->get_where('kedaiinaja.menu_jenis', ['makananjenis_status' => 1])->result_array();
+        return $this->db->get_where('menu_jenis', ['makananjenis_status' => 1])->result_array();
     }
 }
