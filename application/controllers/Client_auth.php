@@ -21,7 +21,7 @@ class Client_auth extends CI_Controller
         $this->load->view('client_auth/login', $data);
         $this->load->view('templates/auth_footer', $data);
     }
-    
+
     public function registration()
     {
         $data['title'] = 'Registration';
@@ -66,8 +66,6 @@ class Client_auth extends CI_Controller
                 'user_image' => 'default.jpg',
                 'user_password' => password_hash($passwordRegister, PASSWORD_DEFAULT),
                 'role_id' => 2,
-                'team_id' => 0,
-                'owner_status' => 1,
                 'user_status' => 0,
                 'dateCreated' => Date('Y-m-d H:i:s'),
                 'dateModified' => NULL
@@ -94,7 +92,7 @@ class Client_auth extends CI_Controller
                 'result' => true,
                 'error' => ''
             ];
-            
+
             echo json_encode($result);
         }
     }
@@ -141,7 +139,7 @@ class Client_auth extends CI_Controller
                         'result' => 200,
                         'message' => $user['user_email']
                     ];
-        
+
                     echo json_encode($result);
                 } else {
                     // Salah password
@@ -149,7 +147,7 @@ class Client_auth extends CI_Controller
                         'result' => 403,
                         'message' => $email
                     ];
-        
+
                     echo json_encode($result);
                 }
             } else {
@@ -158,7 +156,7 @@ class Client_auth extends CI_Controller
                     'result' => 402,
                     'message' => $email
                 ];
-    
+
                 echo json_encode($result);
             }
         } else {
@@ -260,7 +258,7 @@ class Client_auth extends CI_Controller
     public function logout()
     {
         $this->session->unset_userdata('client_email');
-        
+
         $this->session->set_flashdata('logout', 'Logout');
         redirect('home');
     }
